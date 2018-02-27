@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+{% load staticfiles %} <!-- New line -->
+<html>
+    <head>
+        <title>
+            TV Trail Index
+        </title>
+    </head>
+
+    <body>
+        <h1>
+            TV Trail
+        </h1>
+
+        <div>
+            <img src="{% static "images/scrubs_meme_1.jpg" %}" alt="Random Scrubs meme" /> <br/>
+
+            Index Page <br/>
+            <strong>
+                {{ random }}
+            </strong>
+        </div>
+
+        <div>
+            <a href="{% url 'about' %}">About</a><br/>
+        </div>
+    </body>
+</html>
