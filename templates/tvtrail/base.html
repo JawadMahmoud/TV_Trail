@@ -15,15 +15,22 @@
     <body>
         <!-- Page specific content -->
         <div>
-        {% block body_block %}
-            Default content for "body_block"
-        {% endblock %}
+            <h1>
+                TV Trail
+            </h1>
+        </div>
+        
+
+        <div>
+            {% block body_block %}
+                 Default content for "body_block"
+            {% endblock %}
         </div>
         <hr/>
         <div>
             <ul>
-                <li><a href="{% url 'index' %}"Home></a></li>
-                <li><a href="{% url 'about' %}"About></a></li>
+                <li><a href="{% url 'index' %}">Home</a></li>
+                <li><a href="{% url 'about' %}">About</a></li>
             </ul>
         </div>
     </body>
