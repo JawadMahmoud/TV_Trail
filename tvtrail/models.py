@@ -1,5 +1,6 @@
 from django.db import models
 from django.template.defaultfilters import slugify
+import datetime
 
 # Create your models here.
 
@@ -42,6 +43,7 @@ class episode(models.Model):
     user_ratings = []
     avg_rating = models.DecimalField(default=0, decimal_places=1, max_digits=2)
     runtime = models.IntegerField(default=20)
+    airdate = models.DateField(auto_now=False, auto_now_add=False, default=datetime.date.today)
     synopsis = models.TextField(max_length=10000)
     episode_slug = models.SlugField()
 

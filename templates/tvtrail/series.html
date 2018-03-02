@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        TV Trail
+    </head>
+
+    <body>
+        <div>
+            {% if show %}
+                <h1>
+                    {{ show.show_name }}
+                </h1>
+                {% if seasons %}
+                    <ul>
+                        {% for season in seasons %}
+                            <li>
+                                <h2>
+                                Season: {{ season.season_num }}
+                                </h2>
+                                {% if episodes %}
+                                    <ul>
+                                        {% for episode in episodes %}
+                                            {% if episode.season_num == season %}
+                                            <l1>
+                                                Episode: {{ episode.episode_num }}<br/>
+                                                {{ episode.episode_title }}<br/>
+                                            </l1>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </ul>
+                                {% else %}
+                                    <strong>
+                                        No episodes.
+                                    </strong>
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <strong>
+                        No seasons in this show.
+                    </strong>
+                {% endif %}
+            {% else %}
+                <strong>
+                    The specified show does not exist in our database.
+                </strong>
+            {% endif %}
+        </div>
+    </body>
+</html>
