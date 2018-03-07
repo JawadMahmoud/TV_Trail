@@ -81,3 +81,6 @@ class user_episode_relation(models.Model):
     episode = models.ForeignKey(episode)
     rating =  models.DecimalField(default=0, decimal_places=1, max_digits=2)
     watched = models.BooleanField(default=False)
+
+    def __str__(self):
+        return str(self.rating)
