@@ -9,8 +9,11 @@
             {% if show %}
                 <h1>
                     {{ show.show_name }} <br/>
-                    Your Rating: {{ show_status.rating }} <br/>
                 </h1>
+                <h2>
+                    Your Rating: {{ show_status.rating }} <br/>
+                    Average Rating: {{ average }} <br/>
+                </h2>
                 {% if seasons %}
                     <ul>
                         {% for season in seasons %}
@@ -25,6 +28,14 @@
                                             <l1>
                                                 Episode: {{ episode.episode_num }}<br/>
                                                 {{ episode.episode_title }}<br/>
+                                                Your Rating: 
+                                                {% for status in ep_status %}
+                                                    {% if status.episode == episode %}
+                                                        {{ status.rating }} <br/>
+                                                        {{ status.watched }}
+                                                    {% endif %}
+                                                {% endfor %}
+                                                <br/>
                                             </l1>
                                             {% endif %}
                                         {% endfor %}

@@ -8,6 +8,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.db.models import Avg
 
 
 # Create your views here.
@@ -36,8 +37,16 @@ def show_tvseries(request, username, tv_show_slug):
         show = tv_show.objects.get(show_slug=tv_show_slug)
         seasons = season.objects.filter(show_name=show)
         episodes = episode.objects.filter(show_id=show)
-        show_status = user_show_relation.objects.filter(user=userprofile ,show=show)
+        show_status = user_show_relation.objects.get(user=userprofile ,show=show)
         episode_status = user_episode_relation.objects.filter(user=userprofile, show=show)
+        avg_show_rating = user_show_relation.objects.filter(show=show)
+        average = 0
+        counter = 0
+        for status in avg_show_rating:
+            counter = counter + 1
+            average = average + status.rating
+            average = average/counter
+
 
         context_dict['show'] = show
         context_dict['seasons'] = seasons
@@ -45,6 +54,8 @@ def show_tvseries(request, username, tv_show_slug):
         context_dict['active_user'] = user
         context_dict['ep_status'] = episode_status
         context_dict['show_status'] = show_status
+        context_dict['avg_show_rating'] = avg_show_rating
+        context_dict['average'] = average
 
     except tv_show.DoesNotExist:
         context_dict['show'] = None
@@ -53,6 +64,8 @@ def show_tvseries(request, username, tv_show_slug):
         context_dict['active_user'] = None
         context_dict['ep_status'] = None
         context_dict['show_status'] = None
+        context_dict['avg_show_rating'] = None
+        context_dict['average'] = None
 
     return render(request, 'tvtrail/series.html', context_dict)
 
