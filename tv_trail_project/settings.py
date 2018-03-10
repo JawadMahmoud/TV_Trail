@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'tvtrail',
+    'registration',
 ]
 
 MIDDLEWARE = [
@@ -128,4 +129,9 @@ MEDIA_ROOT = MEDIA_DIR
 
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
-LOGIN_URL = '/tvtrail/login/'
+LOGIN_URL = '/accounts/login/'
+LOGIN_REDIRECT_URL = '/tvtrail/'
+
+REGISTRATION_OPEN = True
+ACCOUNT_ACTIVATION_DAYS = 7
+REGISTRATION_AUTO_LOGIN = True

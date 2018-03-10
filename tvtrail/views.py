@@ -1,11 +1,13 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from tvtrail.models import tv_show, season, episode
+from tvtrail.models import tv_show, season, episode, UserProfile
+from tvtrail.models import user_episode_relation, user_show_relation
 from tvtrail.forms import UserForm, UserProfileForm
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 
 
 # Create your views here.
@@ -19,74 +21,74 @@ def about(request):
     context_dict = {'random':"random"}
     return render(request, 'tvtrail/about.html', context=context_dict)
 
-def show_tvseries(request, tv_show_slug):
+@login_required
+def show_tvseries(request, username, tv_show_slug):
     context_dict = {}
+
+    try:
+        user = User.objects.get(username=username)
+    except User.DoesNotExist:
+        return redirect('index')
+
+    userprofile = UserProfile.objects.get_or_create(user=user)[0]
 
     try:
         show = tv_show.objects.get(show_slug=tv_show_slug)
         seasons = season.objects.filter(show_name=show)
         episodes = episode.objects.filter(show_id=show)
+        show_status = user_show_relation.objects.filter(user=userprofile ,show=show)
+        episode_status = user_episode_relation.objects.filter(user=userprofile, show=show)
 
         context_dict['show'] = show
         context_dict['seasons'] = seasons
         context_dict['episodes'] = episodes
+        context_dict['active_user'] = user
+        context_dict['ep_status'] = episode_status
+        context_dict['show_status'] = show_status
 
     except tv_show.DoesNotExist:
         context_dict['show'] = None
         context_dict['seasons'] = None
         context_dict['episodes'] = None
+        context_dict['active_user'] = None
+        context_dict['ep_status'] = None
+        context_dict['show_status'] = None
 
     return render(request, 'tvtrail/series.html', context_dict)
 
-def register(request):
-    registered = False
-
+@login_required
+def register_profile(request):
+    form = UserProfileForm()
     if request.method == 'POST':
-        user_form = UserForm(data=request.POST)
-        profile_form = UserProfileForm(data=request.POST)
-
-        if user_form.is_valid() and profile_form.is_valid():
-            user = user_form.save()
-            profile = profile_form.save(commit=False)
-            profile.user = user
-            
-            if 'picture' in request.FILES:
-                profile.picture = request.FILES['picture']
-            
-            profile.save()
-
-            registered = True
+        form = UserProfileForm(request.POST, request.FILES)
+        if form.is_valid():
+            user_profile = form.save(commit=False)
+            user_profile.user = request.user
+            user_profile.save()
+            return redirect('index')
         else:
-            print(user_form.errors, profile_form.errors)
-    else:
-        user_form = UserForm()
-        profile_form = UserProfileForm()
-
-    return render(request, 'tvtrail/register.html', {'user_form':user_form, 'profile_form':profile_form, 'registered':registered})
-
-def user_login(request):
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-
-        user = authenticate(username=username, password=password)
-
-        if user:
-            if user.is_active:
-                login(request, user)
-                return HttpResponseRedirect(reverse('index'))
-            else:
-                return HttpResponse("Your TV Trail account is disabled.")
-        else: 
-            print ("Invalid login details: {0}, {1}".format(username, password))
-            return HttpResponse("Invalid login details supplied.")
-
-    else:
-        return render(request, 'tvtrail/login.html', {})
+            print(form.errors)
+    context_dict = {'form':form}
+    return render(request, 'tvtrail/profile_registration.html', context_dict)
 
 @login_required
-def user_logout(request):
-    logout(request)
-    return HttpResponseRedirect(reverse('index'))
+def profile(request, username):
+    try:
+        user = User.objects.get(username=username)
+    except:
+        return redirect('index')
+
+    userprofile = UserProfile.objects.get_or_create(user=user)[0]
+    form = UserProfileForm({'picture': userprofile.picture, 'watchlist': userprofile.watchlist})
+
+    if request.method == 'POST':
+        form = UserProfileForm(request.POST, request.FILES, instance=userprofile)
+        if form.is_valid():
+            form.save(commit=True)
+            return redirect('profile', user.username)
+        else:
+            print(form.errors)
+    
+    return render(request, 'tvtrail/profile.html', {'userprofile': userprofile, 'selecteduser': user, 'form': form})
 
     

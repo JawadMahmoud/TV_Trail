@@ -1,0 +1,12 @@
+{% extends "tvtrail/base.html" %}
+{% block title_block %}
+    Registration - Profile
+{% endblock %}
+{% block body_block %}
+    <h1>Registration - Update Profile</h1>
+    <form method="post" action="." enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Submit" />
+    </form>
+{% endblock %}

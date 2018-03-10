@@ -8,7 +8,8 @@
         <div>
             {% if show %}
                 <h1>
-                    {{ show.show_name }}
+                    {{ show.show_name }} <br/>
+                    Your Rating: {{ show_status.rating }} <br/>
                 </h1>
                 {% if seasons %}
                     <ul>
