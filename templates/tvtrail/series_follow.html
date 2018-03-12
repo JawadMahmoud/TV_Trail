@@ -1,0 +1,25 @@
+{% extends "tvtrail/base.html" %}
+{% load staticfiles %}
+
+{% block title_block %}
+    Edit Watchlist
+{% endblock %}
+
+{% block body_block %}
+{% if show %}
+    {% if added == True %}
+        <strong>
+            {{ show.show_name }} has been added to your Watchlist.
+        </strong>
+    {% else %}
+        <strong>
+            {{ show.show_name }} has been removed from your Watchlist.
+        </strong>
+    {% endif %}
+{% else %}
+    <strong>
+        The specified show does not exist in our database.
+    </strong>
+{% endif %}
+{% endblock %}
+

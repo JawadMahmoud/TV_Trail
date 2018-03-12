@@ -4,8 +4,10 @@ from tvtrail import views
 urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^about/', views.about, name='about'),
-    url(r'^series/(?P<tv_show_slug>[\w\-]+)/(?P<username>[\w\-]+)/$', 
+    url(r'^series/(?P<tv_show_slug>[\w\-]+)/$', 
         views.show_tvseries, name='show_tvseries'),
+    url(r'^series_follow/(?P<tv_show_slug>[\w\-]+)/$', 
+        views.series_follow, name='series_follow'),
     url(r'^register_profile/$', views.register_profile, name='register_profile'),
     url(r'^profile/(?P<username>[\w\-]+)/$', views.profile, name='profile'),
 ]

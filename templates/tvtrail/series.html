@@ -1,10 +1,11 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        TV Trail
-    </head>
+{% extends 'tvtrail/base.html' %}
+{% load staticfiles %}
 
-    <body>
+{% block title_block %}
+    {{ show.show_name }}
+{% endblock %}
+
+{% block body_block %}
         <div>
             {% if show %}
                 <h1>
@@ -14,6 +15,13 @@
                     Your Rating: {{ show_status.rating }} <br/>
                     Average Rating: {{ average }} <br/>
                 </h2>
+                {% if show in active_userprofile.watchlist.all %}
+                    <p>Followed</p>
+                    <a href="{% url 'series_follow' show.show_slug %}">Unfollow</a> <br/>
+                {% else %}
+                    <p>Not Following</p>
+                    <a href="{% url 'series_follow' show.show_slug %}">Follow</a> <br/>
+                {% endif %}
                 {% if seasons %}
                     <ul>
                         {% for season in seasons %}
@@ -59,5 +67,4 @@
                 </strong>
             {% endif %}
         </div>
-    </body>
-</html>
+{% endblock %}

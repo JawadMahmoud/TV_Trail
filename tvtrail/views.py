@@ -23,49 +23,55 @@ def about(request):
     return render(request, 'tvtrail/about.html', context=context_dict)
 
 @login_required
-def show_tvseries(request, username, tv_show_slug):
+def show_tvseries(request, tv_show_slug):
     context_dict = {}
 
     try:
-        user = User.objects.get(username=username)
+        current_user = User.objects.get(username=request.user)
+        context_dict['active_user'] = current_user
     except User.DoesNotExist:
         return redirect('index')
-
-    userprofile = UserProfile.objects.get_or_create(user=user)[0]
+    try:
+        userprofile = UserProfile.objects.get_or_create(user=current_user)[0]
+        context_dict['active_userprofile'] = userprofile
+    except UserProfile.DoesNotExist:
+        return redirect('index')
 
     try:
         show = tv_show.objects.get(show_slug=tv_show_slug)
         seasons = season.objects.filter(show_name=show)
         episodes = episode.objects.filter(show_id=show)
-        show_status = user_show_relation.objects.get(user=userprofile ,show=show)
-        episode_status = user_episode_relation.objects.filter(user=userprofile, show=show)
-        avg_show_rating = user_show_relation.objects.filter(show=show)
-        average = 0
-        counter = 0
-        for status in avg_show_rating:
-            counter = counter + 1
-            average = average + status.rating
-            average = average/counter
-
-
         context_dict['show'] = show
         context_dict['seasons'] = seasons
         context_dict['episodes'] = episodes
-        context_dict['active_user'] = user
-        context_dict['ep_status'] = episode_status
-        context_dict['show_status'] = show_status
-        context_dict['avg_show_rating'] = avg_show_rating
-        context_dict['average'] = average
-
     except tv_show.DoesNotExist:
         context_dict['show'] = None
         context_dict['seasons'] = None
         context_dict['episodes'] = None
-        context_dict['active_user'] = None
-        context_dict['ep_status'] = None
+
+    try:
+        show_status = user_show_relation.objects.get(user=userprofile ,show=show)
+        context_dict['show_status'] = show_status
+    except user_show_relation.DoesNotExist:
         context_dict['show_status'] = None
-        context_dict['avg_show_rating'] = None
-        context_dict['average'] = None
+        
+    try:
+        episode_status = user_episode_relation.objects.filter(user=userprofile, show=show)
+        context_dict['ep_status'] = episode_status
+    except user_episode_relation.DoesNotExist:
+        context_dict['ep_status'] = None
+
+    avg_show_rating = user_show_relation.objects.filter(show=show)
+    average = 0
+    counter = 0
+    for status in avg_show_rating:
+        counter = counter + 1
+        average = average + status.rating
+        average = average/counter
+
+    context_dict['avg_show_rating'] = avg_show_rating
+    context_dict['average'] = average
+
 
     return render(request, 'tvtrail/series.html', context_dict)
 
@@ -104,4 +110,34 @@ def profile(request, username):
     
     return render(request, 'tvtrail/profile.html', {'userprofile': userprofile, 'selecteduser': user, 'form': form})
 
-    
+@login_required
+def series_follow(request, tv_show_slug):
+    context_dict = {}
+
+    try:
+        current_user = User.objects.get(username=request.user)
+        context_dict['active_user'] = current_user
+    except User.DoesNotExist:
+        return redirect('index')
+    try:
+        userprofile = UserProfile.objects.get_or_create(user=current_user)[0]
+        context_dict['active_userprofile'] = userprofile
+    except UserProfile.DoesNotExist:
+        return redirect('index')
+    try:
+        show = tv_show.objects.get(show_slug=tv_show_slug)
+        context_dict['show'] = show
+    except:
+        context_dict['show'] = None
+
+    if userprofile.watchlist.filter(show_slug=tv_show_slug).exists():
+        userprofile.watchlist.remove(show)
+        added = False
+    else:
+        userprofile.watchlist.add(show)
+        added = True
+
+    context_dict['added'] = added
+
+    return render(request, 'tvtrail/series_follow.html', context_dict)
+
