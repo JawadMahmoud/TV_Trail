@@ -1,5 +1,6 @@
 from django import forms
 from tvtrail.models import UserProfile
+from tvtrail.models import user_show_relation
 from django.contrib.auth.models import User
 
 class UserForm(forms.ModelForm):

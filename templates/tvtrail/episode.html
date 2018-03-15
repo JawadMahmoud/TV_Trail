@@ -1,0 +1,25 @@
+{% extends 'tvtrail/base.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+    {{ show.show_name }} - {{ episodes.episode_title }}
+{% endblock %}
+
+{% block body_block %}
+    <h4><a href="{% url 'show_tvseries' show.show_slug %}">{{ show.show_name }}</a></h4>
+    <strong>Season: {{ episodes.season_num }}</strong>
+    <p>Episode: {{ episodes.episode_num }}</p>
+
+    <h2>
+        {{ episodes.episode_title }} <br/>
+    </h2>
+
+    Watched: {{ ep_status.watched }} <br/>
+    Your Rating: {{ ep_status.rating }} <br/>
+    Average Rating: {{ average }} <br/>
+
+    <p>
+        <strong>Synopsis</strong> <br/>
+        {{ episodes.synopsis }}
+    </p>
+{% endblock %}

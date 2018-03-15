@@ -1,0 +1,20 @@
+{% extends 'tvtrail/base.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+    Explore
+{% endblock %}
+
+{% block body_block %}
+    <h2>
+        Explore
+    </h2>
+
+    <ul>
+        {% for alpha in alphabet_list %}
+            <li>
+                <a href="{% url 'explore_alpha' alpha %}">{{ alpha }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

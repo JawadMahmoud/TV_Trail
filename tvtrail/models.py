@@ -57,7 +57,7 @@ class episode(models.Model):
         super(episode, self).save(*args, **kwargs)
 
     def __str__(self):
-        return self.episode_title
+        return str(self.episode_num)
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User)

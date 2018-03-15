@@ -141,3 +141,98 @@ def series_follow(request, tv_show_slug):
 
     return render(request, 'tvtrail/series_follow.html', context_dict)
 
+@login_required
+def show_episode(request, tv_show_slug, season_param, episode_param):
+    context_dict = {}
+
+    try:
+        current_user = User.objects.get(username=request.user)
+        context_dict['active_user'] = current_user
+    except User.DoesNotExist:
+        return redirect('index')
+    try:
+        userprofile = UserProfile.objects.get_or_create(user=current_user)[0]
+        context_dict['active_userprofile'] = userprofile
+    except UserProfile.DoesNotExist:
+        return redirect('index')
+
+    try:
+        show = tv_show.objects.get(show_slug=tv_show_slug)
+        seasons = season.objects.get(show_name=show, season_num=season_param)
+        episodes = episode.objects.filter(show_id=show, season_num=seasons)[int(episode_param)-1]
+        context_dict['show'] = show
+        context_dict['seasons'] = seasons
+        context_dict['episodes'] = episodes
+    except tv_show.DoesNotExist:
+        context_dict['show'] = None
+        context_dict['seasons'] = None
+        context_dict['episodes'] = None
+
+    try:
+        episode_status = user_episode_relation.objects.get(user=userprofile, show=show, episode=episodes)
+        context_dict['ep_status'] = episode_status
+    except user_episode_relation.DoesNotExist:
+        context_dict['ep_status'] = None
+
+    avg_ep_rating = user_episode_relation.objects.filter(episode=episodes)
+    average = 0
+    counter = 0
+    for rating in avg_ep_rating:
+        counter = counter + 1
+        average = average + rating.rating
+        average = average/counter
+
+    context_dict['avg_show_rating'] = avg_ep_rating
+    context_dict['average'] = average
+
+    return render(request, 'tvtrail/episode.html', context_dict)
+
+def explore(request):
+    context_dict = {}
+
+    try:
+        current_user = User.objects.get(username=request.user)
+        context_dict['active_user'] = current_user
+    except User.DoesNotExist:
+        return redirect('index')
+    try:
+        userprofile = UserProfile.objects.get_or_create(user=current_user)[0]
+        context_dict['active_userprofile'] = userprofile
+    except UserProfile.DoesNotExist:
+        return redirect('index')
+
+    alphabet_list = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
+    context_dict['alphabet_list'] = alphabet_list
+
+    return render(request, 'tvtrail/explore.html', context_dict)
+
+def explore_alpha(request, alphabet):
+    context_dict = {}
+
+    try:
+        current_user = User.objects.get(username=request.user)
+        context_dict['active_user'] = current_user
+    except User.DoesNotExist:
+        return redirect('index')
+    try:
+        userprofile = UserProfile.objects.get_or_create(user=current_user)[0]
+        context_dict['active_userprofile'] = userprofile
+    except UserProfile.DoesNotExist:
+        return redirect('index')
+
+    alpha = alphabet
+    context_dict['alphabet'] = alpha
+
+    shows = tv_show.objects.all()
+    filtered_shows = []
+    for show in shows:
+        if show.show_name[0] == alpha:
+            filtered_shows.append(show)
+
+    if len(filtered_shows) > 0:
+        sorted_shows = sorted(filtered_shows)
+        context_dict['sorted_shows'] = sorted_shows
+    else:
+        context_dict['sorted_shows'] = None
+
+    return render(request, 'tvtrail/explore_alpha.html', context_dict)

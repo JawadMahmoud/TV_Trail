@@ -30,6 +30,7 @@
         <div>
             <ul>
                 {% if user.is_authenticated %}
+                    <li><a href="{% url 'explore' %}">Explore</a></li>
                     <li><a href="{% url 'profile' user.username %}">Profile</a></li>
                     <li><a href="{% url 'auth_logout' %}?next=/tvtrail/">Sign Out</a></li>
                 {% else %}

@@ -12,18 +12,10 @@
         alt="{{selecteduser.username}}" />
     <br/>
     <div>
-        {% if selecteduser.username == user.username %}
-            <form method="post" action="." enctype="multipart/form-data">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <input type="submit" value="Update" />
-            </form>
-        {% else %}
-            <h3>Followed TV Shows:</h3>
+        <h3>Followed TV Shows:</h3>
             {% for series in userprofile.watchlist.all %}
-                <li>{{ series }}</li>
+                <li><a href="{% url 'show_tvseries' series.show_slug %}">{{ series }}</a></li>
             {% endfor %}
-        {% endif %}
-</div>
+    </div>
     <div id="edit_profile"></div>
 {% endblock %}

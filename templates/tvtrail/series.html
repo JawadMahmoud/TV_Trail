@@ -35,7 +35,7 @@
                                             {% if episode.season_num == season %}
                                             <l1>
                                                 Episode: {{ episode.episode_num }}<br/>
-                                                {{ episode.episode_title }}<br/>
+                                                <a href="{% url 'show_episode' show.show_slug season.season_num episode.episode_num %}">{{ episode.episode_title }}</a><br/>
                                                 Your Rating: 
                                                 {% for status in ep_status %}
                                                     {% if status.episode == episode %}

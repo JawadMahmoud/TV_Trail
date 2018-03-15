@@ -1,0 +1,24 @@
+{% extends 'tvtrail/base.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+    Explore - {{ alphabet }}
+{% endblock %}
+
+{% block body_block %}
+    <h2>
+        Explore - {{ alphabet }}
+    </h2>
+
+    {% if sorted_shows %}
+        <ul>
+            {% for show in sorted_shows %}
+                <li>
+                    <a href="{% url 'show_tvseries' show.show_slug %}">{{ show }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <strong>There are no TV Shows starting with {{ alphabet }}</strong>
+    {% endif %}
+{% endblock %}
