@@ -1,0 +1,32 @@
+{% extends 'tvtrail/base.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+    {% if genre %}
+        Genres - {{ genre.genre_name }}
+    {% else %}
+        Genres
+    {% endif %}
+{% endblock %}
+
+{% block body_block %}
+    {% if genre %}
+            <a href="{% url 'genres' %}"><h3>Genres</h3></a>
+        <h2>
+            {{ genre.genre_name }}
+        </h2>
+        {% if shows %}
+            {% for show in shows %}
+                <ul>
+                    <li>
+                        <a href="{% url 'show_tvseries' show.show_slug %}">{{ show.show_name }}</a>
+                    </li>
+                </ul>
+            {% endfor %}
+        {% else %}
+            No TV Shows in this genre
+        {% endif %}
+    {% else %}
+        This genre does not exist
+    {% endif %}
+{% endblock %}

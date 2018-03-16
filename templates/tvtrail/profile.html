@@ -5,12 +5,21 @@
 {% endblock %}
 
 {% block body_block %}
-    <h1>{{selecteduser.username}}</h1>
-    <img src="{{ MEDIA_URL }}{{ userprofile.picture }}"
+    <h3>{{selecteduser.username}}</h3>
+    <h2>{{userprofile.first_name}} {{userprofile.last_name}}</h2>
+    {% if userprofile.picture %}
+        <img src="{{ MEDIA_URL }}{{ userprofile.picture }}"
+            width="300"
+            height="300"
+            alt="{{selecteduser.username}}" />
+        <br/>
+    {% else %}
+        <img src="{% static "images/RandomUserImage.jpg" %}" 
+        alt="Profile Picture" 
         width="300"
-        height="300"
-        alt="{{selecteduser.username}}" />
-    <br/>
+        height="300"/>
+        <br/>
+    {% endif %}
     <div>
         <h3>Followed TV Shows:</h3>
             {% for series in userprofile.watchlist.all %}

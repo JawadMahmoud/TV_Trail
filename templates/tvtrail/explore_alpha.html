@@ -9,9 +9,11 @@
     <h2>
         Explore - {{ alphabet }}
     </h2>
+    <strong>Sort by:</strong> <br/>
+    <button onclick="sortList()">Sort</button>
 
     {% if sorted_shows %}
-        <ul>
+        <ul id="show_list">
             {% for show in sorted_shows %}
                 <li>
                     <a href="{% url 'show_tvseries' show.show_slug %}">{{ show }}</a>

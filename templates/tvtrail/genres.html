@@ -1,0 +1,25 @@
+{% extends 'tvtrail/base.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+    Genres
+{% endblock %}
+
+{% block body_block %}
+    <h2>
+        Genres
+    </h2>
+    {% if genre_list %}
+        <ul>
+            {% for each_genre in genre_list %}
+                <li>
+                    <a href="{% url 'genre_shows' each_genre.genre_name %}">{{ each_genre.genre_name }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <strong>
+            No genres exist.
+        </strong>
+    {% endif %}
+{% endblock %}

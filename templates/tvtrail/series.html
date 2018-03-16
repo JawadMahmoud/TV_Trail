@@ -36,10 +36,10 @@
                                             <l1>
                                                 Episode: {{ episode.episode_num }}<br/>
                                                 <a href="{% url 'show_episode' show.show_slug season.season_num episode.episode_num %}">{{ episode.episode_title }}</a><br/>
-                                                Your Rating: 
+                                                Watched: 
                                                 {% for status in ep_status %}
                                                     {% if status.episode == episode %}
-                                                        {{ status.rating }} <br/>
+
                                                         {{ status.watched }}
                                                     {% endif %}
                                                 {% endfor %}

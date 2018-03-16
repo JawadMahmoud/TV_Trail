@@ -12,8 +12,10 @@ class UserForm(forms.ModelForm):
 
 class UserProfileForm(forms.ModelForm):
     picture = forms.ImageField(required=False)
+    first_name = forms.CharField()
+    last_name = forms.CharField()
 
     class Meta:
         model = UserProfile
-        fields = ('watchlist',)
-        exclude = ('user',)
+        #fields = ('watchlist',)
+        exclude = ('user', 'watchlist')

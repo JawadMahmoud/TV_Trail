@@ -63,6 +63,8 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User)
     picture = models.ImageField(upload_to='profile_pictures', blank=True)
     watchlist = models.ManyToManyField(tv_show)
+    first_name = models.CharField(max_length=128)
+    last_name = models.CharField(max_length=128)
     
 
     def __str__(self):
@@ -80,8 +82,8 @@ class user_episode_relation(models.Model):
     user = models.ForeignKey(UserProfile)
     show = models.ForeignKey(tv_show)
     episode = models.ForeignKey(episode)
-    rating =  models.DecimalField(default=None, decimal_places=1, max_digits=2)
+    #rating =  models.DecimalField(default=None, decimal_places=1, max_digits=2)
     watched = models.BooleanField(default=False)
 
     def __str__(self):
-        return str(self.rating)
+        return '%s %s %s %s' % (self.user, self.show, self.episode, self.watched)
