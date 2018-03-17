@@ -11,10 +11,27 @@
         </h2>
 
         <div>
+            {% if upcoming %}
+                <h3>
+                    Upcoming Episodes:
+                </h3>
+                <ul>
+                    {% for episode in upcoming %}
+                        <li>
+                            <a href="{% url 'show_tvseries' ep_show|get_item:episode %}">{{ episode.show_id }}</a> <br/>
+                            Season: {{ episode.season_num}} Episode: {{ episode.episode_num }}<br/>
+                            <a href="{% url 'show_episode' ep_show|get_item:episode episode.season_num episode.episode_num %}">{{ episode.episode_title }}</a><br/>
+                        </li>
+                    {% endfor %}
+                </ul>
+                
+            {% else %}
+                No upcoming episodes.
+            {% endif %}
+        </div>
+
+        <div>
             <img src="{% static "images/scrubs_meme_1.jpg" %}" alt="Random Scrubs meme" /> <br/>
 
-            <strong>
-                {{ random }}
-            </strong>
         </div>
     {% endblock %}

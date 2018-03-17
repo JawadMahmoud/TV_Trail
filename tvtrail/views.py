@@ -10,12 +10,52 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.db.models import Avg
 from django.template.defaulttags import register
+import datetime
 
 
 # Create your views here.
-
+@login_required
 def index(request):
-    context_dict = {'random':"random text"}
+    context_dict = {}
+
+    current_user = User.objects.get(username=request.user)
+    context_dict['active_user'] = current_user
+
+    userprofile = UserProfile.objects.get_or_create(user=current_user)[0]
+    context_dict['active_userprofile'] = userprofile
+
+    @register.filter
+    def get_item(dictionary, key):
+        return dictionary.get(key)
+    
+    followed_shows = userprofile.watchlist.all()
+    upcoming_episodes = []
+    ep_show_rel = {}
+    #ep_season_rel = {}
+
+    if followed_shows.exists():
+        for show in followed_shows:
+            try:
+                latest_episode = episode.objects.filter(show_id=show, airdate__range=[datetime.datetime.now().date(), datetime.datetime.now().date() + datetime.timedelta(days=7)]).order_by('airdate')[0]
+                #print(latest_episode)
+                ep_show_rel[latest_episode] = show.show_slug
+                #ep_season_rel[latest_episode] = latest_episode.season_num
+            except:
+                latest_episode = None
+            if latest_episode != None:
+                ep_status = user_episode_relation.objects.get(user=userprofile, episode=latest_episode, show=latest_episode.show_id)
+                if ep_status.watched == False:
+                    upcoming_episodes.append(latest_episode)
+                #upcoming_episodes.append(latest_episode)
+    
+    if len(upcoming_episodes) > 0:
+        context_dict['upcoming'] = upcoming_episodes
+    else:
+        context_dict['upcoming'] = None
+
+    context_dict['ep_show'] = ep_show_rel
+    #context_dict['ep_season'] = ep_season_rel
+
     return render(request, 'tvtrail/index.html', context=context_dict)
 
 
@@ -218,6 +258,7 @@ def show_episode(request, tv_show_slug, season_param, episode_param):
         show = tv_show.objects.get(show_slug=tv_show_slug)
         seasons = season.objects.get(show_name=show, season_num=season_param)
         episodes = episode.objects.filter(show_id=show, season_num=seasons)[int(episode_param)-1]
+        print(episodes)
         context_dict['show'] = show
         context_dict['seasons'] = seasons
         context_dict['episodes'] = episodes
@@ -232,16 +273,16 @@ def show_episode(request, tv_show_slug, season_param, episode_param):
     except user_episode_relation.DoesNotExist:
         context_dict['ep_status'] = None
 
-    avg_ep_rating = user_episode_relation.objects.filter(episode=episodes)
-    average = 0
-    counter = 0
-    for rating in avg_ep_rating:
-        counter = counter + 1
-        average = average + rating.rating
-        average = average/counter
+    #avg_ep_rating = user_episode_relation.objects.filter(episode=episodes)
+    #average = 0
+    #counter = 0
+    #for rating in avg_ep_rating:
+    #    counter = counter + 1
+    #    average = average + rating.rating
+    #    average = average/counter
 
-    context_dict['avg_show_rating'] = avg_ep_rating
-    context_dict['average'] = average
+    #context_dict['avg_show_rating'] = avg_ep_rating
+    #context_dict['average'] = average
 
     return render(request, 'tvtrail/episode.html', context_dict)
 
