@@ -41,7 +41,14 @@
                                                 {% for status in ep_status %}
                                                     {% if status.episode == episode %}
 
-                                                        {{ status.watched }}
+                                                        {{ status.watched }}<br/>
+
+                                                        {% if status.watched == True %}
+                                                            <a href="{% url 'episode_watch' show.show_slug season.season_num episode.episode_num %}">Unwatch</a> <br/>
+                                                        {% else %}
+                                                            <a href="{% url 'episode_watch' show.show_slug season.season_num episode.episode_num %}">Watch</a> <br/>
+                                                        {% endif %}
+
                                                     {% endif %}
                                                 {% endfor %}
                                                 <br/>

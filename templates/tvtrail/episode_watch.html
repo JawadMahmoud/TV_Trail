@@ -1,0 +1,24 @@
+{% extends "tvtrail/base.html" %}
+{% load staticfiles %}
+
+{% block title_block %}
+    Edit Watchlist
+{% endblock %}
+
+{% block body_block %}
+{% if show %}
+    {% if set_watched == True %}
+        <strong>
+            You have watched {{ episodes.episode_title }} from {{ show.show_name }}.
+        </strong>
+    {% else %}
+        <strong>
+            You have unwatched {{ episodes.episode_title }} from {{ show.show_name }}.
+        </strong>
+    {% endif %}
+{% else %}
+    <strong>
+        The specified show does not exist in our database.
+    </strong>
+{% endif %}
+{% endblock %}

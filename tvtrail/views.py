@@ -245,6 +245,58 @@ def show_episode(request, tv_show_slug, season_param, episode_param):
 
     return render(request, 'tvtrail/episode.html', context_dict)
 
+@login_required
+def episode_watch(request, tv_show_slug, season_param, episode_param):
+    context_dict = {}
+
+    try:
+        current_user = User.objects.get(username=request.user)
+        context_dict['active_user'] = current_user
+    except User.DoesNotExist:
+        return redirect('index')
+    try:
+        userprofile = UserProfile.objects.get_or_create(user=current_user)[0]
+        context_dict['active_userprofile'] = userprofile
+    except UserProfile.DoesNotExist:
+        return redirect('index')
+
+    try:
+        show = tv_show.objects.get(show_slug=tv_show_slug)
+        seasons = season.objects.get(show_name=show, season_num=season_param)
+        episodes = episode.objects.filter(show_id=show, season_num=seasons)[int(episode_param)-1]
+        context_dict['show'] = show
+        context_dict['seasons'] = seasons
+        context_dict['episodes'] = episodes
+    except tv_show.DoesNotExist:
+        context_dict['show'] = None
+        context_dict['seasons'] = None
+        context_dict['episodes'] = None
+
+    try:
+        episode_status = user_episode_relation.objects.get(user=userprofile, show=show, episode=episodes)
+        status_exists = True
+        context_dict['ep_status'] = episode_status
+    except user_episode_relation.DoesNotExist:
+        status_exists = False
+        context_dict['ep_status'] = None
+
+    if status_exists:
+        if episode_status.watched:
+            set_watched = False
+            episode_status.watched = False
+            episode_status.save()
+
+        elif not episode_status.watched:
+            set_watched = True
+            episode_status.watched = True
+            episode_status.save()
+    else:
+        context_dict['set_watched'] = None
+
+    context_dict['set_watched'] = set_watched
+
+    return render(request, 'tvtrail/episode_watch.html', context_dict)
+
 def explore(request):
     context_dict = {}
 
