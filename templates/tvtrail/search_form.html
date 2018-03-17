@@ -1,0 +1,17 @@
+{% extends 'tvtrail/base.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+    Search
+{% endblock %}
+
+{% block body_block %}
+    <h2>
+        Search
+    </h2>
+
+    <form action="/tvtrail/search/" method="get">
+        <input type="text" name="q">
+        <input type="submit" value="Search">
+    </form>
+{% endblock %}

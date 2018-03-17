@@ -16,4 +16,6 @@ urlpatterns = [
     url(r'^explore/', views.explore, name='explore'),
     url(r'^genres/(?P<genre_param>[\w\-]+)/$', views.genre_shows, name='genre_shows'),
     url(r'^genres/', views.genres, name='genres'),
+    url(r'^search-form/$', views.search_form, name='search_form'),
+    url(r'^search/$', views.search, name='search'),
 ]

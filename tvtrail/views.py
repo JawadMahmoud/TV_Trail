@@ -9,6 +9,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.db.models import Avg
+from django.template.defaulttags import register
 
 
 # Create your views here.
@@ -69,6 +70,9 @@ def show_tvseries(request, tv_show_slug):
         average = average + status.rating
         average = average/counter
 
+    episode_count = episode.objects.filter(show_id=show).count()
+
+    context_dict['ep_count'] = episode_count
     context_dict['avg_show_rating'] = avg_show_rating
     context_dict['average'] = average
 
@@ -92,6 +96,7 @@ def register_profile(request):
 
 @login_required
 def profile(request, username):
+    context_dict = {}
     try:
         user = User.objects.get(username=username)
     except:
@@ -100,6 +105,32 @@ def profile(request, username):
     userprofile = UserProfile.objects.get_or_create(user=user)[0]
     form = UserProfileForm({'picture': userprofile.picture, 'watchlist': userprofile.watchlist})
 
+    @register.filter
+    def get_item(dictionary, key):
+        return dictionary.get(key)
+
+    followed_shows = userprofile.watchlist.all()
+    total_ep_count = {}
+    watched_ep_count = {}
+    completion = {}
+    for show in followed_shows:
+        #print(show.show_name)
+        watch_count = user_episode_relation.objects.filter(user=userprofile, show=show, watched=True).count()
+        watched_ep_count[show.show_name] = watch_count
+
+        ep_count = episode.objects.filter(show_id=show).count()
+        total_ep_count[show.show_name] = ep_count
+        #print(total_ep_count[show.show_name])
+
+        if ep_count > 0:
+            completion[show.show_name] = (watch_count/ep_count)*100
+        else:
+            completion[show.show_name] = None
+
+    context_dict['total_episodes_list'] = total_ep_count
+    context_dict['watch_episodes_list'] = watched_ep_count
+    context_dict['completion_percentage'] = completion
+
     if request.method == 'POST':
         form = UserProfileForm(request.POST, request.FILES, instance=userprofile)
         if form.is_valid():
@@ -107,8 +138,15 @@ def profile(request, username):
             return redirect('profile', user.username)
         else:
             print(form.errors)
-    
-    return render(request, 'tvtrail/profile.html', {'userprofile': userprofile, 'selecteduser': user, 'form': form})
+
+    context_dict['userprofile'] = userprofile
+    context_dict['selected_user'] = user
+    context_dict['form'] = form
+
+    #print(total_ep_count)
+    #print(userprofile.watchlist.all())
+
+    return render(request, 'tvtrail/profile.html', context_dict)
 
 @login_required
 def series_follow(request, tv_show_slug):
@@ -314,3 +352,21 @@ def genre_shows(request, genre_param):
         context_dict['shows'] = None
 
     return render(request, 'tvtrail/genre_shows.html', context_dict)
+
+def search_form(request):
+    return render(request, "tvtrail/search_form.html")
+
+def search(request):
+    context_dict = {}
+
+    if 'q' in request.GET and request.GET['q']:
+        q = request.GET['q']
+        context_dict['query'] = q
+        shows = tv_show.objects.filter(show_name__icontains=q)
+        if shows.exists():
+            context_dict['shows'] = shows
+        else:
+            context_dict['shows'] = None
+        return render(request, 'tvtrail/search_results.html', context_dict)
+    else:
+        return HttpResponse('Please submit a search term.')

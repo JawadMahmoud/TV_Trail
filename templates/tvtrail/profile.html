@@ -23,7 +23,12 @@
     <div>
         <h3>Followed TV Shows:</h3>
             {% for series in userprofile.watchlist.all %}
-                <li><a href="{% url 'show_tvseries' series.show_slug %}">{{ series }}</a></li>
+                <li><a href="{% url 'show_tvseries' series.show_slug %}">{{ series.show_name }}</a></li> <br/>
+                Total episodes: {{ total_episodes_list|get_item:series.show_name }}<br/>
+                Watched episodes: {{ watch_episodes_list|get_item:series.show_name }}<br/>
+                {% if completion_percentage|get_item:series.show_name != None %}
+                    Completion: {{ completion_percentage|get_item:series.show_name }}% <br/>
+                {% endif %}
             {% endfor %}
     </div>
     <div id="edit_profile"></div>

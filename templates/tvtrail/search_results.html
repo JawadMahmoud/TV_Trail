@@ -1,0 +1,24 @@
+{% extends 'tvtrail/base.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+    Search - {{ query }}
+{% endblock %}
+
+{% block body_block %}
+    <h2>
+        Search
+    </h2>
+
+    You searched for: <strong>{{ query }}</strong> <br/>
+
+    {% if shows %}
+        <ul>
+            {% for show in shows %}
+                <li><a href="{% url 'show_tvseries' show.show_slug %}">{{ show.show_name }}</a></li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        No TV Shows matched your search criteria.
+    {% endif %}
+{% endblock %}
