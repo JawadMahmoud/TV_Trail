@@ -30,6 +30,19 @@
                     Completion: {{ completion_percentage|get_item:series.show_name }}% <br/>
                 {% endif %}
             {% endfor %}
+            <br/>
+    </div>
+
+    <div>
+        <h3>
+            Total Completion: {{ total_completion_percentage }}
+        </h3>
+
+        <div class="progress">
+            <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                {{ total_completion_percentage }}% Complete
+            </div>
+        </div>
     </div>
     <div id="edit_profile"></div>
 {% endblock %}

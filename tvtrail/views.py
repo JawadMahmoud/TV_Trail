@@ -154,12 +154,19 @@ def profile(request, username):
     total_ep_count = {}
     watched_ep_count = {}
     completion = {}
+
+    all_ep_count = 0
+    all_watch_count = 0
+    all_completion = 0
+
     for show in followed_shows:
         #print(show.show_name)
         watch_count = user_episode_relation.objects.filter(user=userprofile, show=show, watched=True).count()
+        all_watch_count = all_watch_count + watch_count
         watched_ep_count[show.show_name] = watch_count
 
         ep_count = episode.objects.filter(show_id=show).count()
+        all_ep_count = all_ep_count + ep_count
         total_ep_count[show.show_name] = ep_count
         #print(total_ep_count[show.show_name])
 
@@ -168,9 +175,16 @@ def profile(request, username):
         else:
             completion[show.show_name] = None
 
+        if all_ep_count > 0:
+            all_completion = round(((all_watch_count/all_ep_count)*100),1)
+        else:
+            all_completion = 0
+
     context_dict['total_episodes_list'] = total_ep_count
     context_dict['watch_episodes_list'] = watched_ep_count
     context_dict['completion_percentage'] = completion
+
+    context_dict['total_completion_percentage'] = all_completion
 
     if request.method == 'POST':
         form = UserProfileForm(request.POST, request.FILES, instance=userprofile)
