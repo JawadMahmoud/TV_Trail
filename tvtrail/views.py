@@ -38,11 +38,12 @@ def index(request):
             try:
                 latest_episode = episode.objects.filter(show_id=show, airdate__range=[datetime.datetime.now().date(), datetime.datetime.now().date() + datetime.timedelta(days=7)]).order_by('airdate')[0]
                 #print(latest_episode)
-                ep_show_rel[latest_episode] = show.show_slug
+                #ep_show_rel[latest_episode] = show.show_slug
                 #ep_season_rel[latest_episode] = latest_episode.season_num
             except:
                 latest_episode = None
             if latest_episode != None:
+                ep_show_rel[latest_episode] = show.show_slug
                 ep_status = user_episode_relation.objects.get(user=userprofile, episode=latest_episode, show=latest_episode.show_id)
                 if ep_status.watched == False:
                     upcoming_episodes.append(latest_episode)
@@ -463,3 +464,59 @@ def search(request):
         return render(request, 'tvtrail/search_results.html', context_dict)
     else:
         return HttpResponse('Please submit a search term.')
+
+def upcoming(request):
+    context_dict = {}
+
+    current_user = User.objects.get(username=request.user)
+    context_dict['active_user'] = current_user
+
+    userprofile = UserProfile.objects.get_or_create(user=current_user)[0]
+    context_dict['active_userprofile'] = userprofile
+
+    @register.filter
+    def get_item(dictionary, key):
+        return dictionary.get(key)
+    
+    followed_shows = userprofile.watchlist.all()
+    upcoming_episodes = []
+    ep_show_rel = {}
+    today = datetime.datetime.now().date()
+    date_list = []
+    days_index = 0
+    while days_index < 7:
+        date_list.append(today + datetime.timedelta(days=days_index))
+        days_index = days_index + 1
+
+    for each in date_list:
+        print(each)
+
+    #ep_season_rel = {}
+
+    if followed_shows.exists():
+        for show in followed_shows:
+            try:
+                #latest_episode = episode.objects.filter(show_id=show, airdate__range=[today, today + datetime.timedelta(days=7)]).order_by('airdate')[0]
+                latest_episode = episode.objects.filter(show_id=show, airdate__gte=today).order_by('airdate')[0]
+                #print(latest_episode)
+                #ep_show_rel[latest_episode] = show.show_slug
+                #ep_season_rel[latest_episode] = latest_episode.season_num
+            except:
+                latest_episode = None
+            if latest_episode != None:
+                ep_show_rel[latest_episode] = show.show_slug
+                ep_status = user_episode_relation.objects.get(user=userprofile, episode=latest_episode, show=latest_episode.show_id)
+                print(latest_episode.airdate)
+                if ep_status.watched == False:
+                    upcoming_episodes.append(latest_episode)
+                #upcoming_episodes.append(latest_episode)
+    
+    if len(upcoming_episodes) > 0:
+        context_dict['upcoming'] = upcoming_episodes
+    else:
+        context_dict['upcoming'] = None
+
+    context_dict['ep_show'] = ep_show_rel
+    context_dict['date_list'] = date_list
+
+    return render(request, 'tvtrail/upcoming.html', context_dict)

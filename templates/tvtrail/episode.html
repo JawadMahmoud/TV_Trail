@@ -13,8 +13,16 @@
     <h2>
         {{ episodes.episode_title }} <br/>
     </h2>
+    {% if ep_status.watched != None %}
+        Watched: {{ ep_status.watched }} <br/>
+    {% endif %}
 
-    Watched: {{ ep_status.watched }} <br/>
+    {% if ep_status.watched == True %}
+        <a href="{% url 'episode_watch' show.show_slug episodes.season_num episodes.episode_num %}">Unwatch</a> <br/>
+    {% else %}
+        <a href="{% url 'episode_watch' show.show_slug episodes.season_num episodes.episode_num %}">Watch</a> <br/>
+    {% endif %}
+
     Your Rating: {{ ep_status.rating }} <br/>
     Average Rating: {{ average }} <br/>
 

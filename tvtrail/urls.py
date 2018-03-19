@@ -20,4 +20,5 @@ urlpatterns = [
     url(r'^genres/', views.genres, name='genres'),
     url(r'^search-form/$', views.search_form, name='search_form'),
     url(r'^search/$', views.search, name='search'),
+    url(r'^upcoming/$', views.upcoming, name='upcoming'),
 ]

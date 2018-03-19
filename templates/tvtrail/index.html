@@ -21,7 +21,9 @@
                             <a href="{% url 'show_tvseries' ep_show|get_item:episode %}">{{ episode.show_id }}</a> <br/>
                             Season: {{ episode.season_num}} Episode: {{ episode.episode_num }}<br/>
                             <a href="{% url 'show_episode' ep_show|get_item:episode episode.season_num episode.episode_num %}">{{ episode.episode_title }}</a><br/>
+                            <a href="{% url 'episode_watch' ep_show|get_item:episode episode.season_num episode.episode_num %}">Mark Watched</a> <br/>
                         </li>
+                        <br/>
                     {% endfor %}
                 </ul>
                 
