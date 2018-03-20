@@ -20,6 +20,7 @@ class tv_show(models.Model):
     genres = models.ManyToManyField(genre)
     synopsis = models.TextField(max_length=10000)
     show_slug = models.SlugField()
+    followers = models.IntegerField(default=0)
 
     def save(self, *args, **kwargs):
         self.show_slug = slugify(self.show_name)
@@ -62,7 +63,7 @@ class episode(models.Model):
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
     picture = models.ImageField(upload_to='profile_pictures', blank=True)
-    watchlist = models.ManyToManyField(tv_show)
+    watchlist = models.ManyToManyField(tv_show, blank=True)
     first_name = models.CharField(max_length=128)
     last_name = models.CharField(max_length=128)
     

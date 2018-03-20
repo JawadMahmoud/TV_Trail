@@ -19,7 +19,7 @@
                     {% for date in date_list %}
                         {% for episode in upcoming %}
                             {% if episode.airdate == date %}
-                                {{ date }} <br/>
+                                <h3>{{ date }}</h3> <br/>
                                 <li>
                                     <a href="{% url 'show_tvseries' ep_show|get_item:episode %}">{{ episode.show_id }}</a> <br/>
                                     Season: {{ episode.season_num}} Episode: {{ episode.episode_num }}<br/>

@@ -11,6 +11,7 @@ from django.contrib.auth.models import User
 from django.db.models import Avg
 from django.template.defaulttags import register
 import datetime
+from django.db.models import F
 
 
 # Create your views here.
@@ -56,6 +57,13 @@ def index(request):
 
     context_dict['ep_show'] = ep_show_rel
     #context_dict['ep_season'] = ep_season_rel
+
+    popular_shows = tv_show.objects.filter(followers__gt=0).order_by('-followers')[:5]
+
+    if popular_shows != None:
+        context_dict['popular_five'] = popular_shows
+    else:
+        context_dict['popular_five'] = None
 
     return render(request, 'tvtrail/index.html', context=context_dict)
 
@@ -146,11 +154,18 @@ def profile(request, username):
     userprofile = UserProfile.objects.get_or_create(user=user)[0]
     form = UserProfileForm({'picture': userprofile.picture, 'watchlist': userprofile.watchlist})
 
+    current_user = User.objects.get(username=request.user)
+    current_userprofile = UserProfile.objects.get_or_create(user=current_user)[0]
+
+
     @register.filter
     def get_item(dictionary, key):
         return dictionary.get(key)
 
     followed_shows = userprofile.watchlist.all()
+    #total_series_followed = current_userprofile.watchlist.all.count()
+
+
     total_ep_count = {}
     watched_ep_count = {}
     completion = {}
@@ -158,6 +173,9 @@ def profile(request, username):
     all_ep_count = 0
     all_watch_count = 0
     all_completion = 0
+
+    total_time_watched = 0
+    total_time_left = 0
 
     for show in followed_shows:
         #print(show.show_name)
@@ -171,6 +189,13 @@ def profile(request, username):
         #print(total_ep_count[show.show_name])
 
         if ep_count > 0:
+            all_episodes = episode.objects.filter(show_id=show)
+            for episode_in_show in all_episodes:
+                episode_in_show_status = user_episode_relation.objects.get(user=current_userprofile, episode=episode_in_show)
+                if episode_in_show_status.watched == True:
+                    total_time_watched = total_time_watched + episode_in_show.runtime
+                elif episode_in_show_status.watched == False:
+                    total_time_left = total_time_left + episode_in_show.runtime
             completion[show.show_name] = (watch_count/ep_count)*100
         else:
             completion[show.show_name] = None
@@ -196,10 +221,18 @@ def profile(request, username):
 
     context_dict['userprofile'] = userprofile
     context_dict['selected_user'] = user
+    context_dict['current_user'] = current_user
+    context_dict['current_userprofile'] = current_userprofile
     context_dict['form'] = form
 
     #print(total_ep_count)
     #print(userprofile.watchlist.all())
+
+    ##### STATS
+    context_dict['total_episodes_watched'] = all_watch_count
+    context_dict['total_time_spent_watching'] = total_time_watched
+    context_dict['total_time_for_completion'] = total_time_left
+    #context_dict['total_series_followed'] = total_series_followed
 
     return render(request, 'tvtrail/profile.html', context_dict)
 
@@ -236,6 +269,9 @@ def series_follow(request, tv_show_slug):
             if ep_rels.exists():
                 for each in ep_rels:
                     each.delete()
+            
+            tv_show.objects.filter(show_id=show.show_id).update(followers=F('followers') - 1)
+            #show.update(followers=F('followers') - 1)
         else:
             userprofile.watchlist.add(show)
             added = True
@@ -249,6 +285,9 @@ def series_follow(request, tv_show_slug):
                     rel.episode = each_episode
                     rel.watched = False
                     rel.save()
+            
+            tv_show.objects.filter(show_id=show.show_id).update(followers=F('followers') + 1)
+            #show.update(followers=F('followers') + 1)
 
     context_dict['added'] = added
 

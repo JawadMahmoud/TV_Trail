@@ -32,8 +32,19 @@
             {% endif %}
         </div>
 
-        <div>
-            <img src="{% static "images/scrubs_meme_1.jpg" %}" alt="Random Scrubs meme" /> <br/>
 
+        <div>
+            <h3>
+                Most Followed Shows:
+            </h3>
+            {% if popular_five != None %}
+                {% for popshow in popular_five %}
+                    <li>
+                        <a href="{% url 'show_tvseries' popshow.show_slug %}">{{ popshow.show_name }}</a>
+                    </li>
+                {% endfor %}
+            {% else %}
+                No Popular Shows.
+            {% endif %}
         </div>
     {% endblock %}

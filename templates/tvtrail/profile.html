@@ -23,11 +23,16 @@
     <div>
         <h3>Followed TV Shows:</h3>
             {% for series in userprofile.watchlist.all %}
-                <li><a href="{% url 'show_tvseries' series.show_slug %}">{{ series.show_name }}</a></li> <br/>
+                <a href="{% url 'show_tvseries' series.show_slug %}"><h2>{{ series.show_name }}</h2></a> <br/>
                 Total episodes: {{ total_episodes_list|get_item:series.show_name }}<br/>
                 Watched episodes: {{ watch_episodes_list|get_item:series.show_name }}<br/>
                 {% if completion_percentage|get_item:series.show_name != None %}
-                    Completion: {{ completion_percentage|get_item:series.show_name }}% <br/>
+                    <!-- Completion: {{ completion_percentage|get_item:series.show_name }}% <br/> -->
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width:{{ completion_percentage|get_item:series.show_name }}%">
+                            {{ completion_percentage|get_item:series.show_name }}% Complete
+                        </div>
+                    </div>
                 {% endif %}
             {% endfor %}
             <br/>
@@ -35,8 +40,27 @@
 
     <div>
         <h3>
-            Total Completion: {{ total_completion_percentage }}
+            Stats:
         </h3>
+
+        {% if selected_user == current_user %}
+            Total Series Followed: {{ current_userprofile.watchlist.all.count }} <br/>
+            Total Time Spent Watching: {{ total_time_spent_watching }} mins.<br/>
+            Time Left for Completion: {{ total_time_for_completion }} mins.<br/>
+        {% endif %}
+    </div>
+
+    <div>
+        <h3>
+            Total Completion:
+            <!-- Total Completion: {{ total_completion_percentage }} -->
+        </h3>
+
+        <div class="progress">
+            <div class="progress-bar" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width:{{ total_completion_percentage }}%">
+                {{ total_completion_percentage }}% Complete
+            </div>
+        </div>
     </div>
     <div id="edit_profile"></div>
 {% endblock %}
