@@ -26,6 +26,15 @@
                 <a href="{% url 'show_tvseries' series.show_slug %}"><h2>{{ series.show_name }}</h2></a> <br/>
                 Total episodes: {{ total_episodes_list|get_item:series.show_name }}<br/>
                 Watched episodes: {{ watch_episodes_list|get_item:series.show_name }}<br/>
+                {% if selected_user == current_user %}
+                    {% if show_next_ep_season|get_item:series != None %}
+                        Next episode to watch: <br/>
+                        S{{ show_next_ep_season|get_item:series }} E{{ show_next_ep_num|get_item:series }}<br/>
+                        {{ show_next_episode_title|get_item:series }} <br/>
+                    {% else %}
+                        All episodes watched.
+                    {% endif %}
+                {% endif %}
                 {% if completion_percentage|get_item:series.show_name != None %}
                     <!-- Completion: {{ completion_percentage|get_item:series.show_name }}% <br/> -->
                     <div class="progress">
@@ -39,11 +48,11 @@
     </div>
 
     <div>
-        <h3>
-            Stats:
-        </h3>
-
+        
         {% if selected_user == current_user %}
+            <h3>
+                Stats:
+            </h3>
             Total Series Followed: {{ current_userprofile.watchlist.all.count }} <br/>
             Total Time Spent Watching: {{ total_time_spent_watching }} mins.<br/>
             Time Left for Completion: {{ total_time_for_completion }} mins.<br/>

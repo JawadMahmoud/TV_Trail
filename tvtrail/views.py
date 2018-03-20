@@ -177,7 +177,15 @@ def profile(request, username):
     total_time_watched = 0
     total_time_left = 0
 
+    show_next_episode = {}
+    show_next_episode_season = {}
+    show_next_episode_num = {}
+    show_next_episode_title = {}
+
     for show in followed_shows:
+        next_added = False
+        next_episode_list = []
+        
         #print(show.show_name)
         watch_count = user_episode_relation.objects.filter(user=userprofile, show=show, watched=True).count()
         all_watch_count = all_watch_count + watch_count
@@ -189,14 +197,36 @@ def profile(request, username):
         #print(total_ep_count[show.show_name])
 
         if ep_count > 0:
-            all_episodes = episode.objects.filter(show_id=show)
+            all_episodes = episode.objects.filter(show_id=show).order_by('airdate')
             for episode_in_show in all_episodes:
                 episode_in_show_status = user_episode_relation.objects.get(user=current_userprofile, episode=episode_in_show)
                 if episode_in_show_status.watched == True:
                     total_time_watched = total_time_watched + episode_in_show.runtime
                 elif episode_in_show_status.watched == False:
                     total_time_left = total_time_left + episode_in_show.runtime
+                    if len(next_episode_list) == 0:
+                        next_added = True
+                        next_episode_list.append(episode_in_show)
+                        next_episode = next_episode_list[0]
+                        #show_next_episode[show] = [next_episode.season_num, next_episode.episode_num, next_episode.episode_title]
+                        show_next_episode_season[show] = next_episode.season_num
+                        show_next_episode_num[show] = next_episode.episode_num
+                        show_next_episode_title[show] = next_episode.episode_title
+                        
+
             completion[show.show_name] = (watch_count/ep_count)*100
+            #print(show_next_episode)
+            if next_added:
+                #context_dict['show_next_ep'] = show_next_episode
+                context_dict['show_next_ep_season'] = show_next_episode_season
+                context_dict['show_next_ep_num'] = show_next_episode_num
+                context_dict['show_next_episode_title'] = show_next_episode_title
+            else:
+                context_dict['show_next_ep_season'] = None
+                context_dict['show_next_ep_num'] = None
+                context_dict['show_next_episode_title'] = None
+                #context_dict['show_next_ep'] = None
+
         else:
             completion[show.show_name] = None
 
@@ -224,10 +254,11 @@ def profile(request, username):
     context_dict['current_user'] = current_user
     context_dict['current_userprofile'] = current_userprofile
     context_dict['form'] = form
+    context_dict['next_added'] = next_added
 
     #print(total_ep_count)
     #print(userprofile.watchlist.all())
-
+    print(show_next_episode)
     ##### STATS
     context_dict['total_episodes_watched'] = all_watch_count
     context_dict['total_time_spent_watching'] = total_time_watched
