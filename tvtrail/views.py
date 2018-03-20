@@ -182,6 +182,8 @@ def profile(request, username):
     show_next_episode_num = {}
     show_next_episode_title = {}
 
+    next_added = False
+
     for show in followed_shows:
         next_added = False
         next_episode_list = []
@@ -266,6 +268,36 @@ def profile(request, username):
     #context_dict['total_series_followed'] = total_series_followed
 
     return render(request, 'tvtrail/profile.html', context_dict)
+
+@login_required
+def edit_profile(request):
+    context_dict = {}
+
+    try:
+        current_user = User.objects.get(username=request.user)
+        context_dict['active_user'] = current_user
+    except User.DoesNotExist:
+        return redirect('index')
+    try:
+        userprofile = UserProfile.objects.get_or_create(user=current_user)[0]
+        context_dict['active_userprofile'] = userprofile
+    except UserProfile.DoesNotExist:
+        return redirect('index')
+
+
+    form = UserProfileForm({'picture': userprofile.picture, 'first_name': userprofile.first_name, 'last_name': userprofile.last_name})
+
+    if request.method == 'POST':
+        form = UserProfileForm(request.POST, request.FILES, instance=userprofile)
+        if form.is_valid():
+            form.save(commit=True)
+            return redirect('profile', current_user.username)
+        else:
+            print(form.errors)
+
+    context_dict['form'] = form
+
+    return render(request, 'tvtrail/edit_profile.html', context_dict)
 
 @login_required
 def series_follow(request, tv_show_slug):

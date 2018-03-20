@@ -1,0 +1,18 @@
+{% extends 'tvtrail/base.html' %}
+{% load staticfiles %}
+{% block title %}
+    {{ active_user.username }} - Edit Profile
+{% endblock %}
+
+{% block body_block %}
+    <h2>Edit Profile:</h2>
+
+    <form method="post" action="." enctype="multipart/form-data">
+        {% csrf_token %}
+        Profile picture: {{ form.picture }}
+        First Name: {{ form.first_name }}
+        Last Name: {{ form.last_name }}
+        <input type="submit" value="Update" />
+    </form>
+
+{% endblock %}

@@ -20,6 +20,11 @@
         height="300"/>
         <br/>
     {% endif %}
+
+    <div>
+        <a href="{% url 'edit_profile' %}"><strong>Edit Profile</strong></a>
+    </div>
+
     <div>
         <h3>Followed TV Shows:</h3>
             {% for series in userprofile.watchlist.all %}
@@ -71,5 +76,4 @@
             </div>
         </div>
     </div>
-    <div id="edit_profile"></div>
 {% endblock %}
