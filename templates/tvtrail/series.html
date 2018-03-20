@@ -11,6 +11,8 @@
                 <h1>
                     {{ show.show_name }} <br/>
                 </h1>
+                <img src="https://image.tmdb.org/t/p/w300/{{ show.poster }}" alt="Poster">
+
                 <h2>
                     Your Rating: {{ show_status.rating }} <br/>
                     Average Rating: {{ average }} <br/>
@@ -38,10 +40,9 @@
                                             <l1>
                                                 Episode: {{ episode.episode_num }}<br/>
                                                 <a href="{% url 'show_episode' show.show_slug season.season_num episode.episode_num %}">{{ episode.episode_title }}</a><br/>
-                                                Watched: 
                                                 {% for status in ep_status %}
                                                     {% if status.episode == episode %}
-
+                                                        Watched: 
                                                         {{ status.watched }}<br/>
 
                                                         {% if status.watched == True %}

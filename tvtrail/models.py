@@ -12,10 +12,10 @@ class genre(models.Model):
         return self.genre_name
 
 class tv_show(models.Model):
-    show_id = models.CharField(primary_key=True, max_length=128, unique=True)
+    show_id = models.IntegerField(default=None, primary_key=True, unique=True)
     show_name = models.CharField(max_length=512)
     year = models.IntegerField(default=2000)
-    avg_rating = models.DecimalField(default=0, decimal_places=1, max_digits=2)
+    #avg_rating = models.DecimalField(default=0, decimal_places=1, max_digits=2)
     poster = models.ImageField(upload_to='series_posters', blank=True)
     genres = models.ManyToManyField(genre)
     synopsis = models.TextField(max_length=10000)
@@ -42,9 +42,10 @@ class season(models.Model):
         return str(self.season_num)
 
 class episode(models.Model):
-    epsiode_id = models.CharField(max_length=128, unique=True)
+    episode_id = models.CharField(max_length=128, unique=True)
     show_id = models.ForeignKey(tv_show)
     season_num = models.ForeignKey(season)
+    season_number = models.IntegerField(default=1)
     episode_title = models.CharField(max_length=256)
     episode_num = models.IntegerField(default=1)
     avg_rating = models.DecimalField(default=0, decimal_places=1, max_digits=2)
@@ -58,7 +59,7 @@ class episode(models.Model):
         super(episode, self).save(*args, **kwargs)
 
     def __str__(self):
-        return str(self.episode_num)
+        return self.episode_title
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
