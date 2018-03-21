@@ -49,7 +49,7 @@ class episode(models.Model):
     season_number = models.IntegerField(default=1)
     episode_title = models.CharField(max_length=256)
     episode_num = models.IntegerField(default=1)
-    avg_rating = models.DecimalField(default=0, decimal_places=1, max_digits=2)
+    #avg_rating = models.DecimalField(default=0, decimal_places=1, max_digits=2)
     runtime = models.IntegerField(default=20)
     airdate = models.DateField(auto_now=False, auto_now_add=False, default=datetime.date.today)
     synopsis = models.TextField(max_length=10000)
