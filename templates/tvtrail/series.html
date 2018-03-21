@@ -11,7 +11,11 @@
                 <h1>
                     {{ show.show_name }} <br/>
                 </h1>
-                <img src="https://image.tmdb.org/t/p/w300/{{ show.poster }}" alt="Poster">
+                {% if show.poster %}
+                    <img src="https://image.tmdb.org/t/p/w300/{{ show.poster }}" alt="Poster">
+                {% else %}
+                <img src="{% static "images/show_poster_placeholder.png" %}" alt="Profile Picture" width="300" />
+                {% endif %}
 
                 <h2>
                     Your Rating: {{ show_status.rating }} <br/>
@@ -19,6 +23,18 @@
                     Total Episodes: {{ ep_count }} <br/>
                     Followers: {{ show.followers }} <br/>
                 </h2>
+
+                <div>
+                    <h3>
+                        Genres:
+                    </h3>
+                    <strong>
+                    {% for each_genre in show.genres.all %}
+                        {{ each_genre }}<br/>
+                    {% endfor %}
+                    </strong>
+                </div>
+
                 {% if show in active_userprofile.watchlist.all %}
                     <p>Followed</p>
                     <a href="{% url 'series_follow' show.show_slug %}">Unfollow</a> <br/>

@@ -12,6 +12,7 @@
 {% block body_block %}
     {% if genre %}
             <a href="{% url 'genres' %}"><h3>Genres</h3></a>
+            <a href="{% url 'explore_alphabet' %}"><h3>Alphabetical</h3></a> <br/>
         <h2>
             {{ genre.genre_name }}
         </h2>
@@ -19,6 +20,11 @@
             {% for show in shows %}
                 <ul>
                     <li>
+                        {% if show.poster %}
+                            <img src="https://image.tmdb.org/t/p/w200/{{ show.poster }}" alt="Poster" width="100"> <br/>
+                        {% else %}
+                            <img src="{% static "images/show_poster_placeholder.png" %}" alt="Profile Picture" width="100" /> <br/>
+                        {% endif %}
                         <a href="{% url 'show_tvseries' show.show_slug %}">{{ show.show_name }}</a>
                     </li>
                 </ul>

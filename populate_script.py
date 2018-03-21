@@ -32,10 +32,12 @@ def populate():
                 tv_show_year = int(strip_year)
                 finallist = []
                 genrelist = response['genres']
+                tv_show_genre_id = {}
                 for each in genrelist:
                     finallist.append(each['name'])
+                    tv_show_genre_id[each['name']] = each['id']
                     tv_show_genre = finallist
-                add_show(tv_show_name, tv_show_id, tv_show_synopsis, tv_show_poster, tv_show_avg_rating, tv_show_year, tv_show_genre)
+                add_show(tv_show_name, tv_show_id, tv_show_synopsis, tv_show_poster, tv_show_avg_rating, tv_show_year, tv_show_genre, tv_show_genre_id)
                 a = a+1
             except: a = a+1
     a = 1
@@ -87,7 +89,7 @@ def populate():
                 a = a + 1
                 b = 1
             else: check = 0
-def add_show(title, ID, Synopsis, Poster, Avg_rating, Year, Genres):
+def add_show(title, ID, Synopsis, Poster, Avg_rating, Year, Genres, GenreIDs):
     s = tv_show.objects.get_or_create(show_name = title,)[0]
     s.show_id = ID
     s.synopsis = Synopsis
@@ -95,7 +97,7 @@ def add_show(title, ID, Synopsis, Poster, Avg_rating, Year, Genres):
     s.avg_rating = Avg_rating
     s.year = Year
     for eachGenre in Genres:
-        g = genre.objects.get_or_create(genre_name = eachGenre)[0]
+        g = genre.objects.get_or_create(genre_name = eachGenre, genre_id=GenreIDs[eachGenre])[0]
         s.genres.add(g)
 
     print(s.show_name)

@@ -7,7 +7,7 @@
 
 {% block body_block %}
     <h2>
-        Explore
+        Explore Alphabetically
     </h2>
     <a href="{% url 'genres' %}"><h3>Genres</h3></a> <br/>
     <a href="{% url 'explore_alphabet' %}"><h3>Alphabetical</h3></a> <br/>
@@ -19,4 +19,11 @@
         </form>
     </div>
 
+    <ul>
+        {% for alpha in alphabet_list %}
+            <li>
+                <a href="{% url 'explore_alpha' alpha %}">{{ alpha }}</a>
+            </li>
+        {% endfor %}
+    </ul>
 {% endblock %}

@@ -6,7 +6,8 @@ import datetime
 # Create your models here.
 
 class genre(models.Model):
-    genre_name = models.CharField(max_length=128, primary_key=True, unique=True)
+    genre_id = models.IntegerField(default=1, unique=True, primary_key=True)
+    genre_name = models.CharField(max_length=128, unique=True)
 
     def __str__(self):
         return self.genre_name

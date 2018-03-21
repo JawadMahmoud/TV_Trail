@@ -455,7 +455,25 @@ def episode_watch(request, tv_show_slug, season_param, episode_param):
 
     return render(request, 'tvtrail/episode_watch.html', context_dict)
 
+@login_required
 def explore(request):
+    context_dict = {}
+
+    try:
+        current_user = User.objects.get(username=request.user)
+        context_dict['active_user'] = current_user
+    except User.DoesNotExist:
+        return redirect('index')
+    try:
+        userprofile = UserProfile.objects.get_or_create(user=current_user)[0]
+        context_dict['active_userprofile'] = userprofile
+    except UserProfile.DoesNotExist:
+        return redirect('index')
+
+    return render(request, 'tvtrail/explore.html', context_dict)
+
+@login_required
+def explore_alphabet(request):
     context_dict = {}
 
     try:
@@ -472,8 +490,9 @@ def explore(request):
     alphabet_list = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
     context_dict['alphabet_list'] = alphabet_list
 
-    return render(request, 'tvtrail/explore.html', context_dict)
+    return render(request, 'tvtrail/explore_alphabet.html', context_dict)
 
+@login_required
 def explore_alpha(request, alphabet):
     context_dict = {}
 
@@ -509,6 +528,7 @@ def explore_alpha(request, alphabet):
 
     return render(request, 'tvtrail/explore_alpha.html', context_dict)
 
+@login_required
 def genres(request):
     context_dict = {}
 
@@ -532,6 +552,7 @@ def genres(request):
 
     return render(request, 'tvtrail/genres.html', context_dict)
 
+@login_required
 def genre_shows(request, genre_param):
     context_dict = {}
 
@@ -547,7 +568,7 @@ def genre_shows(request, genre_param):
         return redirect('index')
 
     try:
-        current_genre = genre.objects.get(genre_name=genre_param)
+        current_genre = genre.objects.get(genre_id=genre_param)
         context_dict['genre'] = current_genre
     except genre.DoesNotExist:
         context_dict['genre'] = None
@@ -563,9 +584,11 @@ def genre_shows(request, genre_param):
 
     return render(request, 'tvtrail/genre_shows.html', context_dict)
 
+@login_required
 def search_form(request):
     return render(request, "tvtrail/search_form.html")
 
+@login_required
 def search(request):
     context_dict = {}
 
@@ -581,6 +604,7 @@ def search(request):
     else:
         return HttpResponse('Please submit a search term.')
 
+@login_required
 def upcoming(request):
     context_dict = {}
 

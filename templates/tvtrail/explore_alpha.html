@@ -9,13 +9,19 @@
     <h2>
         Explore - {{ alphabet }}
     </h2>
-    <strong>Sort by:</strong> <br/>
-    <button onclick="sortList()">Sort</button>
+    
+    <a href="{% url 'genres' %}"><h3>Genres</h3></a> <br/>
+    <a href="{% url 'explore_alphabet' %}"><h3>Alphabetical</h3></a> <br/>
 
     {% if sorted_shows %}
         <ul id="show_list">
             {% for show in sorted_shows %}
                 <li>
+                    {% if show.poster %}
+                        <img src="https://image.tmdb.org/t/p/w200/{{ show.poster }}" alt="Poster" width="100"> <br/>
+                    {% else %}
+                        <img src="{% static "images/show_poster_placeholder.png" %}" alt="Profile Picture" width="100" /> <br/>
+                    {% endif %}
                     <a href="{% url 'show_tvseries' show.show_slug %}">{{ show }}</a>
                 </li>
             {% endfor %}

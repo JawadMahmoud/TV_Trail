@@ -9,11 +9,15 @@
     <h2>
         Genres
     </h2>
+
+    <a href="{% url 'genres' %}"><h3>Genres</h3></a> <br/>
+    <a href="{% url 'explore_alphabet' %}"><h3>Alphabetical</h3></a> <br/>
+
     {% if genre_list %}
         <ul>
             {% for each_genre in genre_list %}
                 <li>
-                    <a href="{% url 'genre_shows' each_genre.genre_name %}">{{ each_genre.genre_name }}</a>
+                    <a href="{% url 'genre_shows' each_genre.genre_id %}">{{ each_genre.genre_name }}</a>
                 </li>
             {% endfor %}
         </ul>

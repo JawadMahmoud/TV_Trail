@@ -15,6 +15,7 @@ urlpatterns = [
     url(r'^register_profile/$', views.register_profile, name='register_profile'),
     url(r'^profile/(?P<username>[\w\-]+)/$', views.profile, name='profile'),
     url(r'^explore/(?P<alphabet>[\w\-]+)/$', views.explore_alpha, name='explore_alpha'),
+    url(r'^explore_alpha/', views.explore_alphabet, name='explore_alphabet'),
     url(r'^explore/', views.explore, name='explore'),
     url(r'^genres/(?P<genre_param>[\w\-]+)/$', views.genre_shows, name='genre_shows'),
     url(r'^genres/', views.genres, name='genres'),
