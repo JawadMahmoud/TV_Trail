@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block body_block %}
-    <h3>{{selecteduser.username}}</h3>
+    <h3>{{selected_user.username}}</h3>
     <h2>{{userprofile.first_name}} {{userprofile.last_name}}</h2>
     {% if userprofile.picture %}
         <img src="{{ MEDIA_URL }}{{ userprofile.picture }}"

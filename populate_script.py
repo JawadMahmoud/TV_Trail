@@ -16,8 +16,8 @@ tmdb.API_KEY = 'ecffefd97cb0d5b7fe8ce74e5439ff1f'
 def populate():
 
 
-    a = 1402
-    while a==1402:
+    a = 48891
+    while a==48891:
             try: 
                 show = tmdb.TV(a)
                 response = show.info()
@@ -41,9 +41,9 @@ def populate():
                 add_show(tv_show_name, tv_show_id, tv_show_synopsis, tv_show_poster, tv_show_avg_rating, tv_show_year, tv_show_genre, tv_show_genre_id)
                 a = a+1
             except: a = a+1
-    a = 1402
+    a = 48891
     b = 1
-    while a==1402:
+    while a==48891:
         
             try:
                 show = tmdb.TV(a)
@@ -59,11 +59,11 @@ def populate():
                 a = a+1
                 b = 1
 
-    a=1402
+    a=48891
     b=1
     c=1
     check = 1
-    while a==1402:
+    while a==48891:
     
         try:
             show = tmdb.TV(a)
@@ -97,7 +97,7 @@ def populate():
             check = 1
             #time.sleep(1)
         except:
-            print("except")
+            #print("except")
             b = b + 1
             c = 1
             if check == 0:
@@ -108,8 +108,8 @@ def populate():
 
 
 def add_show(title, ID, Synopsis, Poster, Avg_rating, Year, Genres, GenreIDs):
-    s = tv_show.objects.get_or_create(show_name = title,)[0]
-    s.show_id = ID
+    s = tv_show.objects.get_or_create(show_name = title, show_id = ID)[0]
+    #s.show_id = ID
     s.synopsis = Synopsis
     s.poster = Poster
     #s.avg_rating = Avg_rating
