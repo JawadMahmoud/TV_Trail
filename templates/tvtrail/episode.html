@@ -6,30 +6,220 @@
 {% endblock %}
 
 {% block body_block %}
-    <h4><a href="{% url 'show_tvseries' show.show_slug %}">{{ show.show_name }}</a></h4>
-    <strong>Season: {{ episodes.season_num }}</strong>
-    <p>Episode: {{ episodes.episode_num }}</p>
 
-    <h2>
-        {{ episodes.episode_title }} <br/>
-    </h2>
-    {% if ep_status.watched != None %}
-        Watched: {{ ep_status.watched }} <br/>
-    {% endif %}
+<!DOCTYPE html>
+<html>
+    
+    <head>
+        <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
+                <link rel="stylesheet" href="{% static "css/profss.css" %}" type="text/css"> </head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
+        <link rel="stylesheet" href="https://v40.pingendo.com/assets/4.0.0/default/theme.css" type="text/css"> </head>
+            <link rel="stylesheet" href="{% static 'css/expl.css' %}" type="text/css"> </head>
+                <script src="{% static 'js/explore.js' %}"></script>
+                
+                <body>
+                    
+                    
+                    <div class="py-5 bg-dark">
+                        <div class="container">
+                            <div class="row">
+                                
+                                <div class="col-md-2" style="">
+                                    <p class="lead text-center w-100 my-1 mx-4"></p>
+                                </div>
+                                <div class="col-md-1" style="">
+                                    <div class="btn-group">
+                                        <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">Sort By</button>
+                                        <div class="dropdown-menu">
+                                            <li><a class="dropdown-item" href="{% url 'explore_alphabet' %}"><h3>Alphabet</h3></a></li>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item" href="{% url 'genres' %}"><h3>Genre</h3></a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-1" style="">
+                                    <p class="lead text-center w-100 my-1 mx-4">OR</p>
+                                </div>
+                                <div class="col-md-5" style="">
+                                    <form class="form-inline" action="/tvtrail/search/" method="get">
+                                        <input class="form-control mr-2" type="text" placeholder="Search" name="q">
+                                            <button class="btn btn-primary" type="submit" value="Search">Search</button>
+                                            </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
+                    <div class="py-10 bg-dark">
+                        <div class="container">
+                            <div class="row">
+                                {% if show %}
+                                <div class="col-md-2 my-4">
+                                    {% if show.poster %}
+                                    <img src="https://image.tmdb.org/t/p/w300/{{ show.poster }}"
+                                    width="300"
+                                    height="auto"
+                                    alt="Poster" />
+                                    <br/>
+                                    {% else %}
+                                    <img src="{% static "images/show_poster_placeholder.png" %}"
+                                    alt="Profile Picture"
+                                    width="100"
+                                    height="100"/>
+                                    <br/>
+                                    {% endif %}
+                                </div>
+                                
+                                
+                                
+                                <div class="text-center align-self-center   col-md-5 my-4">
+                                    <a href="{% url 'show_tvseries' show.show_slug %}">
+                                        <h1 class="w-100 text-primary"><strong>{{ show.show_name }}</strong></h1>
+                                        
+                                        <h4 class="w-100 text-white"><strong>Season: {{ episodes.season_num }}</strong></h3>
+                                            
+                                            
+                                        <h4 class="w-100 text-white">Episode: {{ episodes.episode_num }}</h4>
 
-    {% if ep_status.watched == True %}
-        <a href="{% url 'episode_watch' show.show_slug episodes.season_num episodes.episode_num %}">Unwatch</a> <br/>
-    {% else %}
-        <a href="{% url 'episode_watch' show.show_slug episodes.season_num episodes.episode_num %}">Watch</a> <br/>
-    {% endif %}
 
-    Your Rating: {{ ep_status.rating }} <br/>
-    Average Rating: {{ average }} <br/>
+                                        
+                                    </a>
+                                    {% if ep_status.watched != None %}
+                                    <h4 class="w-100 text-white">Watched: {{ ep_status.watched }}</h4>
+                                    {% endif %}
+                                    
+                                    {% if ep_status.watched == True %}
+                                    <div class="text-center align-self-center   col-md-12">
+                                        <a href="{% url 'episode_watch' show.show_slug episodes.season_num episodes.episode_num %}">
+                                            <h4 class="w-100 text-primary">Unwatch</h4>
+                                        </a>
+                                    </div>
+                                    
+                                    {% else %}
+                                    <div class="text-center align-self-center   col-md-12">
+                                        <a href="{% url 'episode_watch' show.show_slug episodes.season_num episodes.episode_num %}">
+                                            <h4 class="w-100 text-primary">Watch</h4>
+                                        </a>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="col-md-4">
+                                    <div class="col-md-12  ">
+                                        
+                                        <div class="list-group">
+                                            <div class="d-flex w-100 justify-content-between text-center"> </div>
+                                            
+                                            <a href="#" class="list-group-item list-group-item-action flex-column align-items-start active bg-dark border border-dark">
+                                                
+                                                
+                                            </a>
+                                            <a href="#" class="list-group-item list-group-item-action flex-column align-items-start active bg-dark border border-dark">
+                                                <div class="d-flex w-100 justify-content-between text-center"> </div>
+                                            </a>
+                                            <a href="#" class="list-group-item list-group-item-action flex-column align-items-start active bg-dark border border-dark">
+                                                <h3 class="mb-1 text-center"></h3>
+                                                <div class="d-flex w-100 justify-content-between text-center"> </div>
+                                            </a>
+                                           
+                                            <a href="#" class="list-group-item list-group-item-action flex-column align-items-start active bg-dark border border-dark">
+                                                <div class="d-flex w-100 justify-content-between">
+                                                    <h5 class="mb-1">Your Rating:</h5> <stron>{{ ep_status.rating }}</strong> </div>
+                                            </a>
+                                            {% endif %}
+                                            <a href="#" class="list-group-item list-group-item-action flex-column align-items-start active bg-dark border border-dark">
+                                                <div class="d-flex w-100 justify-content-between  ">
+                                                    <h5 class="mb-1">Average Rating:</h5> <small>{{ average }}</small> </div>
+                                            </a>
+                                            <a href="#" class="list-group-item list-group-item-action flex-column align-items-start active bg-dark border border-dark">
+                                                <div class="d-flex w-100 justify-content-between">
+                                                    <h5 class="mb-1">Runtime:</h5> <small>{{ episodes.runtime }} mins.</small> </div>
+                                            </a>
 
-    Runtime: {{ episodes.runtime }} mins. <br/>
-
-    <p>
-        <strong>Synopsis</strong> <br/>
-        {{ episodes.synopsis }}
-    </p>
+                                        </div>
+                                    </div>
+                                    
+                                    
+                                </div>
+                                
+                            </div>
+                            
+                        </div>
+                                
+                                <div class="py-5 bg-dark">
+                                    <div class="container h-100">
+                                        <div class="row">
+                                            <div class="col-md-5 offset-md-7 bg-dark" > </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6"  id="left">
+                                                <li>
+                                                    <h2 class="w-100 text-white"><strong>{{ episodes.episode_title }}</strong></h2>
+                                                    
+                                                    <l1>
+                                                        <li>
+                                                        <p class="text-left text-white">Synopsis</p>
+                                                        <p class="text-left text-white">{{ episodes.synopsis }}</p>
+                                                    
+                                                        </div>
+                                        </div>
+                                    </div>
+                    
+                    
+                    
+                    
+    
+    </div>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    
+    <style type="text/css">
+        
+        
+        
+        #container{
+            width: 100%;
+            height: 500px;
+            overflow: hidden;
+        }
+    #left {
+        position: relative;
+        top: 0px;
+        bottom: 0;
+        left: 0;
+        width: 75%;
+        overflow-y: scroll;
+        height: 405px;
+        text-align: center;
+        
+        
+    }
+    
+    
+    ::-webkit-scrollbar {
+        width: 0px;
+        background: transparent;
+    }
+    
+    * {
+        -ms-overflow-style: none !important;
+    }
+    
+        </style>
+    
+    
+    
+                </body>
+                
+                
+                
+</html>
 {% endblock %}
+
+
+

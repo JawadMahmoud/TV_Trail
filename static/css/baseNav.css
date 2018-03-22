@@ -1,0 +1,54 @@
+#navbar {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #9b59b6;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 8%;
+    z-index:9; 
+}
+
+#navbar li {
+    float: left;
+    color:white
+}
+
+#navbar a {
+    display: block;
+    color: white;
+    text-align: left;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-family: "Helvetica";
+}
+
+#navbar a:hover{
+	background-color:#9b59b6;
+    color:black;
+}
+
+#active {
+    font-weight: bold;
+    text-decoration-line: none;
+    text-decoration-color: white;
+    text-decoration-style: solid;
+}
+
+#login li {
+    float:right;
+}
+
+
+#navbar img {
+    padding-top: 0.0px;
+    padding-bottom: 15px;
+    padding-left: 15px;
+    padding-right: 5px;
+    width: 60px;
+    height: 60px;
+}
+
+

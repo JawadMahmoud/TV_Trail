@@ -1,50 +1,96 @@
 {% extends 'tvtrail/base.html' %}
 {% load staticfiles %}
 
-    {% block title_block %}
-        Index
-    {% endblock %}
+{% block title_block %}
+Index
+{% endblock %}
 
-    {% block body_block %}
-        <h2>
-            Index
-        </h2>
-
-        <div>
-            {% if upcoming %}
-                <h3>
-                    Upcoming Episodes:
-                </h3>
-                <ul>
-                    {% for episode in upcoming %}
-                        <li>
-                            <a href="{% url 'show_tvseries' ep_show|get_item:episode %}">{{ episode.show_id }}</a> <br/>
-                            Season: {{ episode.season_num}} Episode: {{ episode.episode_num }}<br/>
-                            <a href="{% url 'show_episode' ep_show|get_item:episode episode.season_num episode.episode_num %}">{{ episode.episode_title }}</a><br/>
-                            <a href="{% url 'episode_watch' ep_show|get_item:episode episode.season_num episode.episode_num %}">Mark Watched</a> <br/>
-                        </li>
-                        <br/>
-                    {% endfor %}
-                </ul>
-                
-            {% else %}
-                No upcoming episodes.
-            {% endif %}
-        </div>
+{% block body_block %}
 
 
-        <div>
-            <h3>
-                Most Followed Shows:
-            </h3>
-            {% if popular_five != None %}
-                {% for popshow in popular_five %}
-                    <li>
-                        <a href="{% url 'show_tvseries' popshow.show_slug %}">{{ popshow.show_name }}</a>
-                    </li>
-                {% endfor %}
-            {% else %}
-                No Popular Shows.
-            {% endif %}
-        </div>
-    {% endblock %}
+
+<!DOCTYPE html>
+<html>
+    
+    <head>
+        <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
+                <link rel="stylesheet" href="https://v40.pingendo.com/assets/4.0.0/default/theme.css" type="text/css"> </head>
+    <link rel="stylesheet" href="{% static 'css/expl.css' %}" type="text/css"> </head>
+        <script src="{% static 'js/explore.js' %}"></script>
+        
+        
+  <body>
+      
+      
+      {% if upcoming %}
+      <ul id="show_list">
+          
+          
+          <div class="py-5">
+              <h1 class="text-left text-white"><strong>Upcoming Episodes</strong></h1>
+              <div class="container">
+                  
+                  <div class="row">
+                      {% for episode in upcoming %}
+                      <div class="col-md-3 mx-1">
+
+                                  
+                                  <a class="text-primary" href="{% url 'show_tvseries' ep_show|get_item:episode %}"><h4><strong>{{ episode.show_id }}</strong></h4></a>
+                                  <h4 class="text-left text-primary">Season: {{ episode.season_num}} Episode: {{ episode.episode_num }}</h4>
+                                  <a class="text-white" href="{% url 'show_episode' ep_show|get_item:episode episode.season_num episode.episode_num %}">{{ episode.episode_title }}</a><br/>
+                                  <a class="text-white" href="{% url 'episode_watch' ep_show|get_item:episode episode.season_num episode.episode_num %}">Mark Watched</a> <br/>
+                                  </div>
+                      
+                      {% endfor %}
+                  </div>
+              </div>
+          </div>
+          </div>
+          
+          {% else %}
+          <div>
+          </div>
+          <h1 class="text-left text-primary"><strong>No upcoming episodes.</strong></h1>
+          {% endif %}
+      
+
+      <div class="py-1">
+          <div class="container">
+              <div class="row">
+                  <div class="col-md-5">
+                      {% if popular_five != None %}
+                      <div class="col-md-12">
+                          <h1 class="text-white">Most Followed Shows:</h1>
+                      </div>
+                      <ul class="list-group">
+                          {% for popshow in popular_five %}
+                          <li class="list-group-item d-flex justify-content-between align-items-center border border-dark bg-dark"</li>
+                              <a href="{% url 'show_tvseries' popshow.show_slug %}">{{ popshow.show_name }}</a>
+                              {% endfor %}
+                              </ul>
+                      {% else %}
+                      <strong>
+                          No Popular Shows.
+                      </strong>
+                      {% endif %}
+                      </ul>
+      </div>
+      </div>
+      </div>
+      </div>
+
+
+
+</div>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  </body>
+  
+  
+</html>
+{% endblock %}
+
+

@@ -6,35 +6,64 @@
     {% endblock %}
 
     {% block body_block %}
-        <h2>
-            Upcoming Episodes
-        </h2>
 
-        <div>
+<!DOCTYPE html>
+<html>
+    
+    <head>
+        <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
+                <link rel="stylesheet" href="https://v40.pingendo.com/assets/4.0.0/default/theme.css" type="text/css"> </head>
+    <link rel="stylesheet" href="{% static 'css/expl.css' %}" type="text/css"> </head>
+        <script src="{% static 'js/explore.js' %}"></script>
+        
+        
+        <body>
+            
+            
             {% if upcoming %}
-                <h3>
-                    Next 7 Days:
-                </h3>
-                <ul>
-                    {% for date in date_list %}
+            <div class="py-5">
+                <h1 class="text-left text-white"><strong>Upcoming Episodes in the next 7 Days</strong></h1>
+                <div class="container">
+                    
+                    
+                    <div class="row">
+                        {% for date in date_list %}
                         {% for episode in upcoming %}
-                            {% if episode.airdate == date %}
-                                <h3>{{ date }}</h3> <br/>
-                                <li>
-                                    <a href="{% url 'show_tvseries' ep_show|get_item:episode %}">{{ episode.show_id }}</a> <br/>
-                                    Season: {{ episode.season_num}} Episode: {{ episode.episode_num }}<br/>
-                                    <a href="{% url 'show_episode' ep_show|get_item:episode episode.season_num episode.episode_num %}">{{ episode.episode_title }}</a><br/>
-                                    <a href="{% url 'episode_watch' ep_show|get_item:episode episode.season_num episode.episode_num %}">Mark Watched</a> <br/>
-                                </li>
+                        {% if episode.airdate == date %}
+                        <div class="col-md-3 mx-1">
+                                <h3 class="text-left text-white"><strong>{{ date }}</strong></h1>
+                                
+                                        
+                                        <a class="text-primary" href="{% url 'show_tvseries' ep_show|get_item:episode %}"><h4><strong>{{ episode.show_id }}</strong></h4></a>
+                                        <h4 class="text-left text-primary">Season: {{ episode.season_num}} Episode: {{ episode.episode_num }}</h4>
+                                        <a class="text-white" href="{% url 'show_episode' ep_show|get_item:episode episode.season_num episode.episode_num %}">{{ episode.episode_title }}</a><br/>
+                                        <a class="text-white" href="{% url 'episode_watch' ep_show|get_item:episode episode.season_num episode.episode_num %}">Mark Watched</a> <br/>
+                                        </div>
+                        
                             {% endif %}
                         {% endfor %}
-                    {% endfor %}
-                </ul>
-                
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            </div>
+            
             {% else %}
-                No upcoming episodes.
+            <div>
+            </div>
+            <h1 class="text-left text-primary"><strong>No upcoming episodes.</strong></h1>
             {% endif %}
-        </div>
-
-    {% endblock %}
     
+    
+    
+    </div>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        </body>
+        
+        
+</html>
+{% endblock %}

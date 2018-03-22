@@ -2,21 +2,62 @@
 {% load staticfiles %}
 
 {% block title_block %}
-    Explore
+Explore
 {% endblock %}
 
 {% block body_block %}
-    <h2>
-        Explore
-    </h2>
-    <a href="{% url 'genres' %}"><h3>Genres</h3></a> <br/>
-    <a href="{% url 'explore_alphabet' %}"><h3>Alphabetical</h3></a> <br/>
 
-    <div>
-        <form action="/tvtrail/search/" method="get">
-            <input type="text" name="q">
-            <input type="submit" value="Search">
-        </form>
-    </div>
+<!DOCTYPE html>
+<html>
+    
+    <head>
+        <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
+                <link rel="stylesheet" href="https://v40.pingendo.com/assets/4.0.0/default/theme.css" type="text/css"> </head>
+                <link rel="stylesheet" href="{% static 'css/expl.css' %}" type="text/css"> </head>
+                <script src="{% static 'js/explore.js' %}"></script>
+    
+    <body>
+        <div class="py-5 bg-dark">
+            <div class="container">
+                <div class="row">
+                    
+                    <div class="col-md-2" style="">
+                        <p class="lead text-center w-100 my-1 mx-4"></p>
+                    </div>
+                    <div class="col-md-1" style="">
+                        <div class="btn-group">
+                            <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">Sort By</button>
+                            <div class="dropdown-menu">
+                                <li><a class="dropdown-item" href="{% url 'explore_alphabet' %}"><h3>Alphabet</h3></a></li>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="{% url 'genres' %}"><h3>Genre</h3></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-1" style="">
+                        <p class="lead text-center w-100 my-1 mx-4">OR</p>
+                    </div>
+                    <div class="col-md-5" style="">
+                        <form class="form-inline" action="/tvtrail/search/" method="get">
+                            <input class="form-control mr-2" type="text" placeholder="Search" name="q">
+                                <button class="btn btn-primary" type="submit" value="Search">Search</button>
+                                </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        </div>
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    </body>
+    
+
+</html>
 
 {% endblock %}
+
+

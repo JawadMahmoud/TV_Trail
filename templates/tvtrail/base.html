@@ -1,55 +1,119 @@
 <!DOCTYPE html>
 {% load staticfiles %}
 
-<html>
-
-    <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    </head>
-
-    <head lang="en">
-        <meta charset="UTF-8"/>
-        <title>
-            TV Trail - 
-            {% block title_block %}
-                Main
-            {% endblock %}
-        </title>
-    </head>
-
-    <body>
-        <!-- Page specific content -->
-        <div>
-            <h1>
-                TV Trail
-            </h1>
-        </div>
+<html lang="en">
+    
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
         
+        <!-- Custom CSS -->
+        <link rel="stylesheet" type="text/css" href="{% static "css/baseNav.css" %}"/>
+        <link rel="stylesheet" type="text/css" href="{% static "css/base.css" %}"/>
+        <link rel="stylesheet" href="{% static 'font-awesome/css/font-awesome.min.css' %}">
+            <link rel="icon" href="{% static "images/Picture1.png" %}">
+        
+        <head>
+            <title>
+                {% block title_block %}
+                {% endblock %}
+            </title>
+        </head>
+        
+        <body>
+   
+            <div>
+                <ul id="navbar">
+                    
+                     
+                     <li><a class="navbar-brand menu-icon" href="{% url 'index' %}">
+                         <img class="menu-img img-responsive" border=5px alt="Icon" src="{% static "images/Picture1.png" %}">
+                             </a></li>
+                     
+                    {% block nav_block %}
 
-        <div>
-            {% block body_block %}
-                 Default content for "body_block"
-            {% endblock %}
-        </div>
-        <hr/>
-        <div>
-            <ul>
-                {% if user.is_authenticated %}
-                    <li><a href="{% url 'explore' %}">Explore</a></li>
-                    <li><a href="{% url 'upcoming' %}">Upcoming</a></li>
-                    <li><a href="{% url 'search_form' %}">Search</a></li>
-                    <li><a href="{% url 'profile' user.username %}">Profile</a></li>
-                    <li><a href="{% url 'auth_logout' %}?next=/tvtrail/">Sign Out</a></li>
-                    <li><a href="{% url 'index' %}">Home</a></li>
-                    <li><a href="{% url 'about' %}">About</a></li>
-                {% else %}
-                    <li><a href="{% url 'auth_login' %}">Sign In</a></li>
-                    <li><a href="{% url 'registration_register' %}">Register</a></li>
-                {% endif %}
-            </ul>
-        </div>
-    </body>
+                    {% endblock %}
+                    
+                    <div id="login">
+                        {% if user.is_authenticated %}
+                        
+                        <li><a href="{% url 'auth_logout' %}?next=/tvtrail/"><i class="fa fa-sign-out"></i>Sign Out</a></li>
+                        <li><a href="{% url 'profile' user.username %}"><i class="fa fa-user"></i>Profile</a></li>
+                        
+                        <li><a href="{% url 'explore' %}">Explore</a></li>
+                        <li><a href="{% url 'upcoming' %}">Upcoming</a></li>
+                        <li id="active"><a href="{% url 'index' %}" >Watchlist</a></li>
+                        
+                        
+                        {% else %}
+                        <li><a href="{% url 'auth_login' %}"><i class="fa fa-sign-in"></i> Log In</a></li>
+                        <li><a href="{% url 'registration_register' %}"><i class="fa fa-user-plus"></i>Register</a></li>
+                        {% endif %}
+                    </div>
+                    
+                </ul>
+            </div>
+            <br>
+            
+            <main role="main">
+                <div class="container">
+                    {% block body_block %}
+                    <!-- Override this block for page content! -->
+                    {% endblock %}
+                </div>
+            </main>
+            
+            
+ 
+            
+            <div class="footer">
+                <a  href="{% url 'index' %}" class="text-white">Home</a>
+                
+                <a  href="{% url 'about' %}" class="text-white">About us    </a>
+                </br>
+
+        
+                
+            </div>
+            
+ 
+            <!-- Bootstrap core JavaScript
+             ================================================== -->
+            <!-- Placed at the end of the document so the pages load faster -->
+            <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+            <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+            <style type="text/css">
+                body { background: black !important; } /* Adding !important forces the browser to overwrite the default style applied by Bootstrap */
+                
+                html, body {
+                    height: 100%;
+                    margin: 0;
+                }
+            .container {
+                padding:25px;
+                min-height: 100%;
+                margin: 0 auto -50px;
+            }
+            .footer,
+            .push {
+                height: 50px;
+            }
+
+
+
+            .footer {
+            position:fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            background-color: #9b59b6;
+            color: white;
+            text-align: right;
+            height: 30px;
+    
+    
+            }
+            
+        </body>
 </html>

@@ -1,0 +1,102 @@
+{% load staticfiles %}
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background-image: url("/static/images/background+pattern+design+33.jpg");
+  color:black;
+}
+
+h1{
+  color:black;
+  
+}
+
+.form-container{
+	background-color: rgba(255, 204, 0, 0.2);
+  
+	border-radius: 20px;
+  border-style: solid;
+  border-color: #ffcc00;
+  border-width: 2px;
+  padding: 20px;
+
+}
+
+.form-signin {
+  width: 100%;
+  max-width: 330px;
+  padding: 15px;
+  margin: 0 auto;
+}
+.form-signin .checkbox {
+  font-weight: 400;
+}
+.form-signin .form-control {
+  position: relative;
+  box-sizing: border-box;
+  height: auto;
+  padding: 10px;
+  font-size: 16px;
+}
+.form-signin .form-control:focus {
+  z-index: 2;
+}
+.form-signin input[type="email"] {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.form-signin input[type="password"] {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.btn-80{
+  width: 80%;
+  color:black;
+  background-color:#ffcc00;
+  border-color:black;
+}
+
+
+
+
+.btn-80 hover{
+  color:blue;
+}
+
+.bottom-text a:link{
+text-decoration: underline;
+	color:red;
+	
+}
+
+.bottom-text a:visited{
+	color:black
+}
+
+.bottom-text a:hover{
+	color:#ffcc00;
+}
+
+.btn-80{
+	border-width: 2px;
+	border-color: #e6b800;
+ 	padding: 20px 20px;
+	width:50%;
+	color:black;
+	background-color: #ffd633
+	transition-duration: 100s;
+}
+
+.btn-80:hover{
+	color:black;
+	transition-duration: 20s;
+	background-color:#ffcc00;
+	background-color: #000000;
+}
+

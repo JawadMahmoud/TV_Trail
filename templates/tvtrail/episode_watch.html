@@ -15,17 +15,18 @@
 
 {% if show %}
     {% if set_watched == True %}
-        <strong>
-            You have watched {{ episodes.episode_title }} from {{ show.show_name }}.
-        </strong>
+
+            <h3 class="text-left text-white">You have watched <strong>{{ episodes.episode_title }}</strong> from <strong>{{ show.show_name }}</strong></h1>
+            
+        
     {% else %}
-        <strong>
-            You have unwatched {{ episodes.episode_title }} from {{ show.show_name }}.
-        </strong>
+        <h3 class="text-left text-white">You have unwatched <strong>{{ episodes.episode_title }}</strong> from <strong>{{ show.show_name }}</strong></h1>
+            
+
     {% endif %}
 {% else %}
-    <strong>
-        The specified show does not exist in our database.
-    </strong>
+        <h3 class="text-left text-white"><strong>The specified show does not exist in our database.</strong></h1>
+    
+    
 {% endif %}
 {% endblock %}

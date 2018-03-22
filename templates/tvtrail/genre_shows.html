@@ -10,29 +10,100 @@
 {% endblock %}
 
 {% block body_block %}
+<!DOCTYPE html>
+<html>
+    
+    
+    <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
+                <link rel="stylesheet" href="https://v40.pingendo.com/assets/4.0.0/default/theme.css" type="text/css"> </head>
+                    <link rel="stylesheet" href="{% static 'css/expl.css' %}" type="text/css"> </head>
+                        <script src="{% static 'js/explore.js' %}"></script>
+                        
+                        <body>
+                            <div class="py-5 bg-dark">
+                                <div class="container">
+                                    <div class="row">
+                                        
+                                        <div class="col-md-2" style="">
+                                            <p class="lead text-center w-100 my-1 mx-4"></p>
+                                        </div>
+                                        <div class="col-md-1" style="">
+                                            <div class="btn-group">
+                                                <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">Sort By</button>
+                                                <div class="dropdown-menu">
+                                                    <li><a class="dropdown-item" href="{% url 'explore_alphabet' %}"><h3>Alphabet</h3></a></li>
+                                                    <div class="dropdown-divider"></div>
+                                                    <a class="dropdown-item" href="{% url 'genres' %}"><h3>Genre</h3></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1" style="">
+                                            <p class="lead text-center w-100 my-1 mx-4">OR</p>
+                                        </div>
+                                        <div class="col-md-5" style="">
+                                            <form class="form-inline" action="/tvtrail/search/" method="get">
+                                                <input class="form-control mr-2" type="text" placeholder="Search" name="q">
+                                                    <button class="btn btn-primary" type="submit" value="Search">Search</button>
+                                                    </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+
+
+
+
+
+
+
     {% if genre %}
-            <a href="{% url 'genres' %}"><h3>Genres</h3></a>
-            <a href="{% url 'explore_alphabet' %}"><h3>Alphabetical</h3></a> <br/>
-        <h2>
-            {{ genre.genre_name }}
-        </h2>
-        {% if shows %}
+     {% if shows %}
+    <div class="py-5">
+        <h1 class="text-left text-primary">TV Shows in <strong>{{ genre.genre_name }}</strong></h1>
+    <div class="container">
+
+        <div class="row">
             {% for show in shows %}
-                <ul>
-                    <li>
-                        {% if show.poster %}
-                            <img src="https://image.tmdb.org/t/p/w200/{{ show.poster }}" alt="Poster" width="100"> <br/>
-                        {% else %}
-                            <img src="{% static "images/show_poster_placeholder.png" %}" alt="Profile Picture" width="100" /> <br/>
+            <div class="col-md-2 mx-1">
+                {% if show.poster %}
+                
+                <img class="img-fluid d-block" src="https://image.tmdb.org/t/p/w200/{{ show.poster }}" alt="Poster" width="100">>
+                    {% else %}
+                    <img class="img-fluid d-block" src="{% static "images/show_poster_placeholder.png" %}" alt="Profile Picture" width="100">
                         {% endif %}
+                        
                         <a href="{% url 'show_tvseries' show.show_slug %}">{{ show.show_name }}</a>
-                    </li>
-                </ul>
+                        </div>
+            
             {% endfor %}
-        {% else %}
-            No TV Shows in this genre
-        {% endif %}
+        </div>
+    </div>
+    </div>
+    </div>
+    
     {% else %}
-        This genre does not exist
+    <div>
+    </div>
+    <h1 class="text-left text-primary">There are No TV Shows in <strong>{{ genre.genre_name }}</strong></h1>
     {% endif %}
+    {% else %}
+    <h1 class="text-left text-primary"><strong>The genre does not exist</strong></h1>
+    {% endif %}
+        
+        
+        
+        
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        
+                        </body>
+                        
+</html>
 {% endblock %}
+

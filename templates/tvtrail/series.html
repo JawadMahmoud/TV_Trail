@@ -1,96 +1,270 @@
 {% extends 'tvtrail/base.html' %}
 {% load staticfiles %}
 
-{% block title_block %}
-    {{ show.show_name }}
+{% block title %}
+    {{ selected_user.username }} Profile
 {% endblock %}
 
 {% block body_block %}
-        <div>
-            {% if show %}
-                <h1>
-                    {{ show.show_name }} <br/>
-                </h1>
-                {% if show.poster %}
-                    <img src="https://image.tmdb.org/t/p/w300/{{ show.poster }}" alt="Poster">
-                {% else %}
-                <img src="{% static "images/show_poster_placeholder.png" %}" alt="Profile Picture" width="300" />
-                {% endif %}
+{% block content %}
+<!DOCTYPE html>
+<html>
+    
+    <head>
+        <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
+                <link rel="stylesheet" href="{% static "css/profss.css" %}" type="text/css"> </head>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
+            <link rel="stylesheet" href="https://v40.pingendo.com/assets/4.0.0/default/theme.css" type="text/css"> </head>
+                <link rel="stylesheet" href="{% static 'css/expl.css' %}" type="text/css"> </head>
+            <script src="{% static 'js/explore.js' %}"></script>
+    
+    <body>
+        
+        
+        
+        <div class="py-5 bg-dark">
+            <div class="container">
+                <div class="row">
+                    
+                    <div class="col-md-2" style="">
+                        <p class="lead text-center w-100 my-1 mx-4"></p>
+                    </div>
+                    <div class="col-md-1" style="">
+                        <div class="btn-group">
+                            <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">Sort By</button>
+                            <div class="dropdown-menu">
+                                <li><a class="dropdown-item" href="{% url 'explore_alphabet' %}"><h3>Alphabet</h3></a></li>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="{% url 'genres' %}"><h3>Genre</h3></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-1" style="">
+                        <p class="lead text-center w-100 my-1 mx-4">OR</p>
+                    </div>
+                    <div class="col-md-5" style="">
+                        <form class="form-inline" action="/tvtrail/search/" method="get">
+                            <input class="form-control mr-2" type="text" placeholder="Search" name="q">
+                                <button class="btn btn-primary" type="submit" value="Search">Search</button>
+                                </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
 
-                <h2>
-                    Your Rating: {{ show_status.rating }} <br/>
-                    Average Rating: {{ average }} <br/>
-                    Total Episodes: {{ ep_count }} <br/>
-                    Followers: {{ show.followers }} <br/>
-                </h2>
+        <div class="py-10 bg-dark">
+            <div class="container">
+                <div class="row">
+                    {% if show %}
+                    <div class="col-md-2 my-4">
+                        {% if show.poster %}
+                        <img src="https://image.tmdb.org/t/p/w300/{{ show.poster }}"
+                        width="300"
+                        height="auto"
+                        alt="Poster" />
+                        <br/>
+                        {% else %}
+                        <img src="{% static "images/show_poster_placeholder.png" %}"
+                        alt="Profile Picture"
+                        width="100"
+                        height="100"/>
+                        <br/>
+                        {% endif %}
+                    </div>
+                    
+                    
+                    
+                    <div class="text-center align-self-center   col-md-5 my-4">
+                        <a href="#">
+                            <h1 class="w-100 text-primary"><strong>{{ show.show_name }}</strong></h1>
+                        </a>
+                        {% if show in active_userprofile.watchlist.all %}
+                        <div class="text-center align-self-center   col-md-12">
+                            <a href="{% url 'series_follow' show.show_slug %}">
+                                <h4 class="w-100 text-primary">Unfollow</h4>
+                            </a>
+                        </div>
+                        
+                        {% else %}
+                        <div class="text-center align-self-center   col-md-12">
+                            <a href="{% url 'series_follow' show.show_slug %}">
+                                <h4 class="w-100 text-primary">Follow</h4>
+                            </a>
+                        </div>
+                        {% endif %}
+                    </div>
 
-                <div>
-                    <h3>
-                        Genres:
-                    </h3>
-                    <strong>
-                    {% for each_genre in show.genres.all %}
-                        {{ each_genre }}<br/>
-                    {% endfor %}
-                    </strong>
+<div class="col-md-4">
+    <div class="col-md-12  ">
+        
+        <div class="list-group">
+            <div class="d-flex w-100 justify-content-between text-center"> </div>
+            
+            <a href="#" class="list-group-item list-group-item-action flex-column align-items-start active bg-dark border border-dark">
+                
+                
+            </a>
+            <a href="#" class="list-group-item list-group-item-action flex-column align-items-start active bg-dark border border-dark">
+                <div class="d-flex w-100 justify-content-between text-center"> </div>
+            </a>
+            <a href="#" class="list-group-item list-group-item-action flex-column align-items-start active bg-dark border border-dark">
+                <h3 class="mb-1 text-center"></h3>
+                <div class="d-flex w-100 justify-content-between text-center"> </div>
+            </a>
+            <a href="#" class="list-group-item list-group-item-action flex-column align-items-start active bg-dark border border-dark">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">Your Rating:</h5> <stron>{{ show_status.rating }}</strong> </div>
+            </a>
+            <a href="#" class="list-group-item list-group-item-action flex-column align-items-start active bg-dark border border-dark">
+                <div class="d-flex w-100 justify-content-between  ">
+                    <h5 class="mb-1">Average Rating:</h5> <small>{{ average }}</small> </div>
+            </a>
+            <a href="#" class="list-group-item list-group-item-action flex-column align-items-start active bg-dark border border-dark">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">Total Episodes:</h5> <small>{{ ep_count }}</small> </div>
+            </a>
+            <a href="#" class="list-group-item list-group-item-action flex-column align-items-start active bg-dark border border-dark">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1 ">Followers:</h5> <small>{{ show.followers }}</small> </div>
+            </a>
+        </div>
+    </div>
+                    
+                   
                 </div>
 
-                {% if show in active_userprofile.watchlist.all %}
-                    <p>Followed</p>
-                    <a href="{% url 'series_follow' show.show_slug %}">Unfollow</a> <br/>
-                {% else %}
-                    <p>Not Following</p>
-                    <a href="{% url 'series_follow' show.show_slug %}">Follow</a> <br/>
-                {% endif %}
-                {% if seasons %}
-                    <ul>
-                        {% for season in seasons %}
-                            <li>
-                                <h2>
-                                Season: {{ season.season_num }}
-                                </h2>
-                                {% if episodes %}
-                                    <ul>
-                                        {% for episode in episodes %}
-                                            {% if episode.season_num == season %}
-                                            <l1>
-                                                Episode: {{ episode.episode_num }}<br/>
-                                                <a href="{% url 'show_episode' show.show_slug season.season_num episode.episode_num %}">{{ episode.episode_title }}</a><br/>
-                                                {% for status in ep_status %}
-                                                    {% if status.episode == episode %}
-                                                        Watched: 
-                                                        {{ status.watched }}<br/>
+            </div>
 
-                                                        {% if status.watched == True %}
-                                                            <a href="{% url 'episode_watch' show.show_slug season.season_num episode.episode_num %}">Unwatch</a> <br/>
-                                                        {% else %}
-                                                            <a href="{% url 'episode_watch' show.show_slug season.season_num episode.episode_num %}">Watch</a> <br/>
-                                                        {% endif %}
-
-                                                    {% endif %}
-                                                {% endfor %}
-                                                <br/>
-                                            </l1>
-                                            {% endif %}
-                                        {% endfor %}
-                                    </ul>
-                                {% else %}
-                                    <strong>
-                                        No episodes.
-                                    </strong>
-                                {% endif %}
-                            </li>
-                        {% endfor %}
-                    </ul>
-                {% else %}
-                    <strong>
-                        No seasons in this show.
-                    </strong>
-                {% endif %}
-            {% else %}
-                <strong>
-                    The specified show does not exist in our database.
-                </strong>
-            {% endif %}
         </div>
+        
+        <div class="py-5 bg-dark">
+            <div class="container h-100">
+                <div class="row">
+                    <div class="col-md-5 offset-md-7 bg-dark" > </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6"  id="left">
+
+                       
+                       {% if seasons %}
+                       <ul>
+                           {% for season in seasons %}
+                           <li>
+ 
+                                   <h3 class="text-left text-primary"> Season <strong>{{ season.season_num }}</strong></h3>
+                    
+                    
+                               {% if episodes %}
+                               <ul>
+                                   {% for episode in episodes %}
+                                   {% if episode.season_num == season %}
+                                   <l1>
+                                       <p class="text-center text-primary"> Episode: <strong>{{ episode.episode_num }}</strong></p>
+                                       <div class="left">
+                                           <a class=" text-white" href="{% url 'show_episode' show.show_slug season.season_num episode.episode_num %}">{{ episode.episode_title }}</a><br/>
+                                       </div>
+                                       {% for status in ep_status %}
+                                       {% if status.episode == episode %}
+                                       Watched:
+                                       {{ status.watched }}<br/>
+                                       
+                                       {% if status.watched == True %}
+                                       <a href="{% url 'episode_watch' show.show_slug season.season_num episode.episode_num %}">Unwatch</a> <br/>
+                                       {% else %}
+                                       <a href="{% url 'episode_watch' show.show_slug season.season_num episode.episode_num %}">Watch</a> <br/>
+                                       {% endif %}
+                                       
+                                       {% endif %}
+                                       {% endfor %}
+                                       <br/>
+                                   </l1>
+                                   {% endif %}
+                                   {% endfor %}
+                               </ul>
+                               {% else %}
+                               <h3 class="text-left text-primary"><strong>No Episodes</strong></h3>
+                               {% endif %}
+                           </li>
+                           {% endfor %}
+                       </ul>
+                       {% else %}
+
+                       <h3 class="text-left text-primary"><strong>No seasons in this show.</strong></h3>
+                       {% endif %}
+                       {% else %}
+                       <h3 class="text-left text-primary"><strong>The specified show does not exist in our database.</strong></h3>
+                       {% endif %}
+                    
+                    
+                    
+                    
+                    
+                    </div>
+                    <div class="col-md-4">
+                        <div class="col-md-12  ">
+                        
+                        <h3>
+                            Genres:
+                        </h3>
+                        <strong>
+                            {% for each_genre in show.genres.all %}
+                            {{ each_genre }}<br/>
+                            {% endfor %}
+                        </strong>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+   
+        </div>
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+        <style type="text/css">
+
+
+        
+        #container{
+            width: 100%;
+            height: 500px;
+            overflow: hidden;
+        }
+            #left {
+                position: relative;
+                top: 0px;
+                bottom: 0;
+                left: 0;
+                width: 75%;
+                overflow-y: scroll;
+                height: 405px;
+                text-align: center;
+
+
+            }
+
+        
+        ::-webkit-scrollbar {
+            width: 0px;
+            background: transparent;
+        }
+        
+        * {
+            -ms-overflow-style: none !important;
+        }
+                
+        </style>
+
+
+
+    </body>
+    
+    
+    
+</html>
+{% endblock %}
 {% endblock %}
