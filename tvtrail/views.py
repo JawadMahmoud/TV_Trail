@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from tvtrail.models import tv_show, season, episode, UserProfile, genre
+from tvtrail.models import tv_show, season, episode, UserProfile, genre, buddy, episode_comment
 from tvtrail.models import user_episode_relation, user_show_relation
-from tvtrail.forms import UserForm, UserProfileForm
+from tvtrail.forms import UserForm, UserProfileForm, EpisodeCommentForm
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
@@ -157,6 +157,28 @@ def profile(request, username):
     current_user = User.objects.get(username=request.user)
     current_userprofile = UserProfile.objects.get_or_create(user=current_user)[0]
 
+    if buddy.objects.filter(current_profile=userprofile).exists():
+        print('obtained')
+        all_buddies = buddy.objects.filter(current_profile=current_userprofile)[0]
+        context_dict['all_buddies'] = all_buddies
+        if userprofile in all_buddies.buddies.all():
+            buddies = True
+            #print('True')
+            context_dict['buddies'] = buddies
+        else:
+            buddies = False
+            #print('False')
+            context_dict['buddies'] = buddies
+        #print(all_buddies.buddies.all())
+        print(buddies)
+    else:
+        #print('created')
+        all_buddies = buddy.objects.create(current_profile=current_userprofile)[0]
+        context_dict['all_buddies'] = all_buddies
+        #print(all_buddies)
+
+    #print(all_buddies)
+
 
     @register.filter
     def get_item(dictionary, key):
@@ -201,7 +223,7 @@ def profile(request, username):
         if ep_count > 0:
             all_episodes = episode.objects.filter(show_id=show).order_by('airdate')
             for episode_in_show in all_episodes:
-                episode_in_show_status = user_episode_relation.objects.get(user=current_userprofile, episode=episode_in_show)
+                episode_in_show_status = user_episode_relation.objects.get(user=userprofile, episode=episode_in_show)
                 if episode_in_show_status.watched == True:
                     total_time_watched = total_time_watched + episode_in_show.runtime
                 elif episode_in_show_status.watched == False:
@@ -260,7 +282,7 @@ def profile(request, username):
 
     #print(total_ep_count)
     #print(userprofile.watchlist.all())
-    print(show_next_episode)
+    #print(show_next_episode)
     ##### STATS
     context_dict['total_episodes_watched'] = all_watch_count
     context_dict['total_time_spent_watching'] = total_time_watched
@@ -400,6 +422,19 @@ def show_episode(request, tv_show_slug, season_param, episode_param):
 
     #context_dict['avg_show_rating'] = avg_ep_rating
     #context_dict['average'] = average
+
+    comment_form = EpisodeCommentForm()
+    if request.method == 'POST':
+        comment_form = EpisodeCommentForm(request.POST)
+        if comment_form.is_valid():
+            user_comment = comment_form.save(commit=False)
+            user_comment.author = userprofile
+            user_comment.episode_id = episodes
+            user_comment.save()
+            return HttpResponseRedirect('/tvtrail/commented/')
+        else:
+            print(comment_form.errors)
+    context_dict['comment_form'] = comment_form
 
     return render(request, 'tvtrail/episode.html', context_dict)
 
@@ -660,3 +695,100 @@ def upcoming(request):
     context_dict['date_list'] = date_list
 
     return render(request, 'tvtrail/upcoming.html', context_dict)
+
+def edit_buddies(request, new_friend_username):
+    context_dict = {}
+
+    try:
+        current_user = User.objects.get(username=request.user)
+        context_dict['active_user'] = current_user
+    except User.DoesNotExist:
+        return redirect('index')
+    try:
+        userprofile = UserProfile.objects.get_or_create(user=current_user)[0]
+        context_dict['active_userprofile'] = userprofile
+    except UserProfile.DoesNotExist:
+        return redirect('index')
+
+    selected_user = User.objects.get(username=new_friend_username)
+    selected_userprofile = UserProfile.objects.get(user=selected_user)
+    context_dict['selected_user'] = selected_user
+    context_dict['selected_userprofile'] = selected_userprofile
+
+    if buddy.objects.filter(current_profile=userprofile, buddies=selected_userprofile).exists():
+        friend_exists = True
+    else:
+        friend_exists = False
+
+    context_dict['friend_exisits'] = friend_exists
+
+    if friend_exists:
+        buddy.removebuddy(userprofile, selected_userprofile)
+        friend_removed = True
+    else:
+        buddy.makebuddy(userprofile, selected_userprofile)
+        friend_removed = False
+
+    context_dict['friend_removed'] = friend_removed
+
+    return render(request, 'tvtrail/edit_buddies.html', context_dict)
+
+def show_buddies(request):
+    context_dict = {}
+
+    try:
+        current_user = User.objects.get(username=request.user)
+        context_dict['active_user'] = current_user
+    except User.DoesNotExist:
+        return redirect('index')
+    try:
+        userprofile = UserProfile.objects.get_or_create(user=current_user)[0]
+        context_dict['active_userprofile'] = userprofile
+    except UserProfile.DoesNotExist:
+        return redirect('index')
+
+    buddy_object = buddy.objects.get(current_profile=userprofile)
+
+    all_buddies = buddy_object.buddies.all()
+
+    if len(all_buddies) == 0:
+        context_dict['all_buddies'] = None
+    else:
+        context_dict['all_buddies'] = all_buddies
+
+    return render(request, 'tvtrail/buddies.html', context_dict)
+
+
+def comment_success(request):
+    context_dict = {}
+
+    try:
+        current_user = User.objects.get(username=request.user)
+        context_dict['active_user'] = current_user
+    except User.DoesNotExist:
+        return redirect('index')
+    try:
+        userprofile = UserProfile.objects.get_or_create(user=current_user)[0]
+        context_dict['active_userprofile'] = userprofile
+    except UserProfile.DoesNotExist:
+        return redirect('index')
+
+    return render(request, 'tvtrail/comment_success.html', context_dict)
+    
+@login_required
+def user_search(request):
+    context_dict = {}
+
+    if 'q' in request.GET and request.GET['q']:
+        q = request.GET['q']
+        context_dict['query'] = q
+        filter_users = User.objects.filter(username__icontains=q)
+        if filter_users.exists():
+            context_dict['filter_users'] = filter_users
+        else:
+            context_dict['filter_users'] = None
+
+        print(filter_users)
+        return render(request, 'tvtrail/user_search_results.html', context_dict)
+    else:
+        return HttpResponse('Please submit a search term.')

@@ -1,0 +1,30 @@
+{% extends "tvtrail/base.html" %}
+{% load staticfiles %}
+
+{% block title_block %}
+    User Search
+{% endblock %}
+
+{% block body_block %}
+
+
+<form class="form-inline" action="/tvtrail/user_search/" method="get">
+    <input class="form-control mr-2" type="text" placeholder="Search" name="q">
+    <button class="btn btn-primary" type="submit" value="Search">Search</button>
+</form>
+
+
+{% if filter_users %}
+    {% for each_user in filter_users %}
+        <li>
+            <img src="{{ MEDIA_URL }}{{ each_user.profile.picture }}" alt="" width="50">
+            <a href="{% url 'profile' each_user.username %}">{{ each_user }}</a>
+        </li>
+    {% endfor %}
+{% else %}
+    <strong>
+        No users matched the search criteria.
+    </strong>
+{% endif %}
+
+{% endblock %}

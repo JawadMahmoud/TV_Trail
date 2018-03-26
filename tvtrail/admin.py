@@ -1,5 +1,5 @@
 from django.contrib import admin
-from tvtrail.models import tv_show, season, episode, genre, UserProfile
+from tvtrail.models import tv_show, season, episode, genre, UserProfile, buddy, episode_comment
 from tvtrail.models import user_show_relation, user_episode_relation
 
 # Register your models here.
@@ -17,3 +17,5 @@ admin.site.register(genre)
 admin.site.register(UserProfile)
 admin.site.register(user_show_relation)
 admin.site.register(user_episode_relation)
+admin.site.register(buddy)
+admin.site.register(episode_comment)

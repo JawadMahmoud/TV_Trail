@@ -2,6 +2,7 @@ from django.db import models
 from django.template.defaultfilters import slugify
 from django.contrib.auth.models import User
 import datetime
+import django.utils.timezone as timezone
 
 # Create your models here.
 
@@ -63,11 +64,12 @@ class episode(models.Model):
         return self.episode_title
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(User)
+    user = models.OneToOneField(User, related_name='profile')
     picture = models.ImageField(upload_to='profile_pictures', blank=True)
     watchlist = models.ManyToManyField(tv_show, blank=True)
     first_name = models.CharField(max_length=128)
     last_name = models.CharField(max_length=128)
+    #friends = models.ManyToManyField(User)
     
 
     def __str__(self):
@@ -90,3 +92,40 @@ class user_episode_relation(models.Model):
 
     def __str__(self):
         return '%s %s %s %s' % (self.user, self.show, self.episode, self.watched)
+
+class buddy(models.Model):
+    buddies = models.ManyToManyField(UserProfile)
+    current_profile = models.ForeignKey(UserProfile, related_name='owner', null=True)
+
+    @classmethod
+    def makebuddy(cls, current_user, new_buddy):
+        friendship = cls.objects.get_or_create(current_profile=current_user)[0]
+        friendship.buddies.add(new_buddy)
+    
+    @classmethod
+    def removebuddy(cls, current_user, remove_buddy):
+        friendship = cls.objects.get(current_profile=current_user)
+        friendship.buddies.remove(remove_buddy)
+
+    def __str__(self):
+        return str(self.current_profile)
+
+    class Meta:
+        verbose_name_plural = 'Buddies'
+        verbose_name = 'Buddy'
+
+class episode_comment(models.Model):
+    author = models.ForeignKey(UserProfile)
+    episode_id = models.ForeignKey(episode, related_name='comments')
+    text = models.TextField(max_length=1024, blank=False)
+    created_date = models.DateField(default=timezone.now)
+    approved_comment = models.BooleanField(default=False)
+
+    def approve(self):
+        self.approved_comment = True
+        self.save()
+
+    def __str__(self):
+        return '%s %s %s' % (self.author, self.episode_id, self.created_date)
+
+    

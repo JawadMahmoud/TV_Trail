@@ -23,4 +23,8 @@ urlpatterns = [
     url(r'^search/$', views.search, name='search'),
     url(r'^upcoming/$', views.upcoming, name='upcoming'),
     url(r'^edit_profile/$', views.edit_profile, name='edit_profile'),
+    url(r'^edit_buddies/(?P<new_friend_username>[\w\-]+)/$', views.edit_buddies, name='edit_buddies'),
+    url(r'^buddies/$', views.show_buddies, name='show_buddies'),
+    url(r'^commented/$', views.comment_success, name='commented'),
+    url(r'^user_search/$', views.user_search, name='user_search'),
 ]

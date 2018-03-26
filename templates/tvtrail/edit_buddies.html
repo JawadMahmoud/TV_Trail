@@ -1,0 +1,32 @@
+{% extends "tvtrail/base.html" %}
+{% load staticfiles %}
+
+{% block title_block %}
+    Edit Buddies
+{% endblock %}
+
+{% block body_block %}
+
+<script type="text/javascript">
+    setTimeout(function() {
+        window.location.href = "{% url 'profile' selected_user.username %}";
+    }, 2000);
+</script>
+
+{% if selected_userprofile %}
+    {% if friend_removed == True %}
+
+            <h3 class="text-left text-white">You have removed <strong>{{ selected_userprofile }}</strong> from your Buddies.</h1>
+            
+        
+    {% else %}
+        <h3 class="text-left text-white">You have added <strong>{{ selected_userprofile }}</strong> to your Buddies.</h1>
+            
+
+    {% endif %}
+{% else %}
+        <h3 class="text-left text-white"><strong>The specified User does not exist in our database.</strong></h1>
+    
+    
+{% endif %}
+{% endblock %}

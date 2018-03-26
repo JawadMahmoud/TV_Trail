@@ -4,3 +4,5 @@
 # ignore .pyc files
 *.pyc
 
+helper_stuff/API Helper.py
+helper_stuff/populate_script_temp.py

@@ -1,5 +1,5 @@
 from django import forms
-from tvtrail.models import UserProfile
+from tvtrail.models import UserProfile, episode_comment
 from tvtrail.models import user_show_relation
 from django.contrib.auth.models import User
 
@@ -19,3 +19,17 @@ class UserProfileForm(forms.ModelForm):
         model = UserProfile
         #fields = ('watchlist',)
         exclude = ('user', 'watchlist')
+
+class EpisodeCommentForm(forms.ModelForm):
+
+    class Meta:
+        model = episode_comment
+        fields = ('text',)
+        exclude = ('author', 'episode_id')
+        widgets = {
+            'text': forms.Textarea(attrs={
+                'id': 'comment-text', 
+                'required': True, 
+                'placeholder': 'Say something...'
+            }),
+        }

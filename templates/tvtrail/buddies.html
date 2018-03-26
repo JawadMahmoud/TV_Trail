@@ -1,0 +1,26 @@
+{% extends "tvtrail/base.html" %}
+{% load staticfiles %}
+
+{% block title_block %}
+    Buddies
+{% endblock %}
+
+{% block body_block %}
+
+    <form class="form-inline" action="/tvtrail/user_search/" method="get">
+        <input class="form-control mr-2" type="text" placeholder="Search" name="q">
+        <button class="btn btn-primary" type="submit" value="Search">Search</button>
+    </form>
+
+    {% if all_buddies %}
+        {% for each_buddy in all_buddies %}
+            <li>
+                <img src="{{ MEDIA_URL }}{{ each_buddy.picture }}" alt="" width="50">
+                <a href="{% url 'profile' each_buddy.user.username %}">{{ each_buddy.user.username }}</a>
+            </li>
+        {% endfor %}
+    {% else %}
+        You have not added any buddies.
+    {% endif %}
+
+{% endblock %}
