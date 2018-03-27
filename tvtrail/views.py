@@ -24,11 +24,11 @@ def index(request):
 
     userprofile = UserProfile.objects.get_or_create(user=current_user)[0]
     context_dict['active_userprofile'] = userprofile
-
+    ## Get values from dictionary in a template
     @register.filter
     def get_item(dictionary, key):
         return dictionary.get(key)
-    
+    ## All the followed shows for the User
     followed_shows = userprofile.watchlist.all()
     upcoming_episodes = []
     ep_show_rel = {}
@@ -37,6 +37,7 @@ def index(request):
     if followed_shows.exists():
         for show in followed_shows:
             try:
+                ## Get the latest episode for this show
                 latest_episode = episode.objects.filter(show_id=show, airdate__range=[datetime.datetime.now().date(), datetime.datetime.now().date() + datetime.timedelta(days=7)]).order_by('airdate')[0]
                 #print(latest_episode)
                 #ep_show_rel[latest_episode] = show.show_slug
@@ -47,6 +48,7 @@ def index(request):
                 ep_show_rel[latest_episode] = show.show_slug
                 ep_status = user_episode_relation.objects.get(user=userprofile, episode=latest_episode, show=latest_episode.show_id)
                 if ep_status.watched == False:
+                    ## Get the Upcoming episodes for followed shows
                     upcoming_episodes.append(latest_episode)
                 #upcoming_episodes.append(latest_episode)
     
@@ -58,6 +60,7 @@ def index(request):
     context_dict['ep_show'] = ep_show_rel
     #context_dict['ep_season'] = ep_season_rel
 
+    ## Get all tv shows with the most followers
     popular_shows = tv_show.objects.filter(followers__gt=0).order_by('-followers')[:5]
 
     if popular_shows != None:
@@ -86,7 +89,7 @@ def show_tvseries(request, tv_show_slug):
         context_dict['active_userprofile'] = userprofile
     except UserProfile.DoesNotExist:
         return redirect('index')
-
+    ## Get all information about the TV Show
     try:
         show = tv_show.objects.get(show_slug=tv_show_slug)
         seasons = season.objects.filter(show_name=show)
@@ -98,13 +101,13 @@ def show_tvseries(request, tv_show_slug):
         context_dict['show'] = None
         context_dict['seasons'] = None
         context_dict['episodes'] = None
-
+    ## Get the status of the Show
     try:
         show_status = user_show_relation.objects.get(user=userprofile ,show=show)
         context_dict['show_status'] = show_status
     except user_show_relation.DoesNotExist:
         context_dict['show_status'] = None
-        
+    ## Get the status of all the episodes of the show
     try:
         episode_status = user_episode_relation.objects.filter(user=userprofile, show=show)
         context_dict['ep_status'] = episode_status
@@ -156,7 +159,7 @@ def profile(request, username):
 
     current_user = User.objects.get(username=request.user)
     current_userprofile = UserProfile.objects.get_or_create(user=current_user)[0]
-
+    ## Get the buddies for the User
     if buddy.objects.filter(current_profile=userprofile).exists():
         print('obtained')
         all_buddies = buddy.objects.filter(current_profile=current_userprofile)[0]
@@ -219,7 +222,7 @@ def profile(request, username):
         all_ep_count = all_ep_count + ep_count
         total_ep_count[show.show_name] = ep_count
         #print(total_ep_count[show.show_name])
-
+        ## Calculating the Stats for the user
         if ep_count > 0:
             all_episodes = episode.objects.filter(show_id=show).order_by('airdate')
             for episode_in_show in all_episodes:
@@ -342,7 +345,7 @@ def series_follow(request, tv_show_slug):
     except:
         show_exists = False
         context_dict['show'] = None
-
+    ## Either follows or Unfollows the TV Show
     if show_exists:
         if userprofile.watchlist.filter(show_slug=tv_show_slug).exists():
             userprofile.watchlist.remove(show)
@@ -360,7 +363,7 @@ def series_follow(request, tv_show_slug):
         else:
             userprofile.watchlist.add(show)
             added = True
-
+            ## Creates the episode status for all the episodes in the show
             episodes_from_show = episode.objects.filter(show_id=show)
             if episodes_from_show.exists():
                 for each_episode in episodes_from_show:
@@ -392,7 +395,7 @@ def show_episode(request, tv_show_slug, season_param, episode_param):
         context_dict['active_userprofile'] = userprofile
     except UserProfile.DoesNotExist:
         return redirect('index')
-
+    ## Getting information about the episode
     try:
         show = tv_show.objects.get(show_slug=tv_show_slug)
         seasons = season.objects.get(show_name=show, season_num=season_param)
@@ -423,6 +426,7 @@ def show_episode(request, tv_show_slug, season_param, episode_param):
     #context_dict['avg_show_rating'] = avg_ep_rating
     #context_dict['average'] = average
 
+    ## Commenting on the episode
     comment_form = EpisodeCommentForm()
     if request.method == 'POST':
         comment_form = EpisodeCommentForm(request.POST)
@@ -452,7 +456,7 @@ def episode_watch(request, tv_show_slug, season_param, episode_param):
         context_dict['active_userprofile'] = userprofile
     except UserProfile.DoesNotExist:
         return redirect('index')
-
+    ## Episode Information
     try:
         show = tv_show.objects.get(show_slug=tv_show_slug)
         seasons = season.objects.get(show_name=show, season_num=season_param)
@@ -464,7 +468,7 @@ def episode_watch(request, tv_show_slug, season_param, episode_param):
         context_dict['show'] = None
         context_dict['seasons'] = None
         context_dict['episodes'] = None
-
+    ## Get the status for the episode
     try:
         episode_status = user_episode_relation.objects.get(user=userprofile, show=show, episode=episodes)
         status_exists = True
@@ -472,7 +476,7 @@ def episode_watch(request, tv_show_slug, season_param, episode_param):
     except user_episode_relation.DoesNotExist:
         status_exists = False
         context_dict['ep_status'] = None
-
+    ## Changes the status for the episode
     if status_exists:
         if episode_status.watched:
             set_watched = False
@@ -544,7 +548,7 @@ def explore_alpha(request, alphabet):
 
     alpha = alphabet
     context_dict['alphabet'] = alpha
-
+    ## Gets the shows for the specified alphabet
     shows = tv_show.objects.order_by('show_name')
     filtered_shows = []
     for show in shows:
@@ -577,7 +581,7 @@ def genres(request):
         context_dict['active_userprofile'] = userprofile
     except UserProfile.DoesNotExist:
         return redirect('index')
-
+    ## Gets all the genres
     genre_list = genre.objects.order_by('genre_name')
 
     if genre_list.exists():
@@ -607,7 +611,7 @@ def genre_shows(request, genre_param):
         context_dict['genre'] = current_genre
     except genre.DoesNotExist:
         context_dict['genre'] = None
-
+    ## Gets the shows for the specified genres
     if context_dict['genre'] != None:
         try:
             shows = tv_show.objects.filter(genres=current_genre).order_by('show_name')
@@ -626,7 +630,7 @@ def search_form(request):
 @login_required
 def search(request):
     context_dict = {}
-
+    ## Searches TV Show objects that contain a specific query
     if 'q' in request.GET and request.GET['q']:
         q = request.GET['q']
         context_dict['query'] = q
@@ -652,7 +656,7 @@ def upcoming(request):
     @register.filter
     def get_item(dictionary, key):
         return dictionary.get(key)
-    
+    ## Gets the followed shows for the user
     followed_shows = userprofile.watchlist.all()
     upcoming_episodes = []
     ep_show_rel = {}
@@ -667,7 +671,7 @@ def upcoming(request):
         print(each)
 
     #ep_season_rel = {}
-
+    ## Gets the episodes for the followed shows that are upcoming
     if followed_shows.exists():
         for show in followed_shows:
             try:
@@ -681,7 +685,7 @@ def upcoming(request):
             if latest_episode != None:
                 ep_show_rel[latest_episode] = show.show_slug
                 ep_status = user_episode_relation.objects.get(user=userprofile, episode=latest_episode, show=latest_episode.show_id)
-                print(latest_episode.airdate)
+                #print(latest_episode.airdate)
                 if ep_status.watched == False:
                     upcoming_episodes.append(latest_episode)
                 #upcoming_episodes.append(latest_episode)
@@ -721,7 +725,7 @@ def edit_buddies(request, new_friend_username):
         friend_exists = False
 
     context_dict['friend_exisits'] = friend_exists
-
+    ## Changes the buddy status for the User
     if friend_exists:
         buddy.removebuddy(userprofile, selected_userprofile)
         friend_removed = True
@@ -748,7 +752,7 @@ def show_buddies(request):
         return redirect('index')
 
     buddy_object = buddy.objects.get(current_profile=userprofile)
-
+    ## Get all buddies
     all_buddies = buddy_object.buddies.all()
 
     if len(all_buddies) == 0:
@@ -778,7 +782,7 @@ def comment_success(request):
 @login_required
 def user_search(request):
     context_dict = {}
-
+    ## Search a user
     if 'q' in request.GET and request.GET['q']:
         q = request.GET['q']
         context_dict['query'] = q

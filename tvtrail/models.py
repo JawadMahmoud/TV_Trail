@@ -6,6 +6,7 @@ import django.utils.timezone as timezone
 
 # Create your models here.
 
+## The genre objects
 class genre(models.Model):
     genre_id = models.IntegerField(default=1, unique=True, primary_key=True)
     genre_name = models.CharField(max_length=128, unique=True)
@@ -13,6 +14,8 @@ class genre(models.Model):
     def __str__(self):
         return self.genre_name
 
+## Each TV Show object
+## Also related to one or more genres
 class tv_show(models.Model):
     show_id = models.IntegerField(default=None, primary_key=True, unique=True)
     show_name = models.CharField(max_length=512)
@@ -35,6 +38,7 @@ class tv_show(models.Model):
         verbose_name_plural = 'TV Shows'
         verbose_name = 'TV Show'
 
+## Each season is related to a TV Show
 class season(models.Model):
     season_id = models.CharField(max_length=128, unique=True)
     show_name = models.ForeignKey(tv_show)
@@ -43,6 +47,7 @@ class season(models.Model):
     def __str__(self):
         return str(self.season_num)
 
+## Each episode is related to a TV Show and a Season
 class episode(models.Model):
     episode_id = models.CharField(max_length=128, unique=True)
     show_id = models.ForeignKey(tv_show)
@@ -63,6 +68,8 @@ class episode(models.Model):
     def __str__(self):
         return self.episode_title
 
+## Each UserProfile is related to a User
+## Contains a watchlist, of all TV Show objects that the User follows
 class UserProfile(models.Model):
     user = models.OneToOneField(User, related_name='profile')
     picture = models.ImageField(upload_to='profile_pictures', blank=True)
@@ -75,6 +82,8 @@ class UserProfile(models.Model):
     def __str__(self):
         return self.user.username
 
+## Relation between User and TV Show to provide a rating
+## Not been implemented yet
 class user_show_relation(models.Model):
     user = models.ForeignKey(UserProfile)
     show = models.ForeignKey(tv_show)
@@ -83,6 +92,7 @@ class user_show_relation(models.Model):
     def __str__(self):
         return str(self.rating)
 
+## Status of episode related to User
 class user_episode_relation(models.Model):
     user = models.ForeignKey(UserProfile)
     show = models.ForeignKey(tv_show)
@@ -93,6 +103,7 @@ class user_episode_relation(models.Model):
     def __str__(self):
         return '%s %s %s %s' % (self.user, self.show, self.episode, self.watched)
 
+## Relation between Users to create a Friendship system
 class buddy(models.Model):
     buddies = models.ManyToManyField(UserProfile)
     current_profile = models.ForeignKey(UserProfile, related_name='owner', null=True)
@@ -114,6 +125,7 @@ class buddy(models.Model):
         verbose_name_plural = 'Buddies'
         verbose_name = 'Buddy'
 
+## Comments on episodes, also related to users
 class episode_comment(models.Model):
     author = models.ForeignKey(UserProfile)
     episode_id = models.ForeignKey(episode, related_name='comments')
