@@ -173,7 +173,7 @@ def profile(request, username):
         print(buddies)
     else:
         #print('created')
-        all_buddies = buddy.objects.create(current_profile=current_userprofile)[0]
+        all_buddies = buddy.objects.create(current_profile=current_userprofile)
         context_dict['all_buddies'] = all_buddies
         #print(all_buddies)
 
