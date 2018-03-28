@@ -700,6 +700,7 @@ def upcoming(request):
 
     return render(request, 'tvtrail/upcoming.html', context_dict)
 
+@login_required
 def edit_buddies(request, new_friend_username):
     context_dict = {}
 
@@ -737,6 +738,7 @@ def edit_buddies(request, new_friend_username):
 
     return render(request, 'tvtrail/edit_buddies.html', context_dict)
 
+@login_required
 def show_buddies(request):
     context_dict = {}
 
@@ -762,7 +764,7 @@ def show_buddies(request):
 
     return render(request, 'tvtrail/buddies.html', context_dict)
 
-
+@login_required
 def comment_success(request):
     context_dict = {}
 
