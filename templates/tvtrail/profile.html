@@ -7,8 +7,8 @@
 
 {% block body_block %}
 {% block content %}
-<!DOCTYPE html>
-<html>
+
+
     
     <head>
         <meta charset="utf-8">
@@ -38,13 +38,13 @@
                     </div>
                     
                     
-                    <div class="text-center align-self-center   col-md-5 my-4">
+                    <div class="text-center align-self-center   col-md-4 my-4">
                         <a href="#">
                             <h1 class="w-100 text-primary">{{userprofile.first_name}} {{userprofile.last_name}}</h1>
                         </a>
                     </div>
                     {% if selected_user != current_user %}
-                    <div class="text-center align-self-center   col-md-1">
+                    <div class="text-center align-self-center   col-md-4">
                         <a href="{% url 'edit_buddies' selected_user.username %}">
                             <h4 class="w-100 text-primary">
                                 {% if buddies == True %}
@@ -56,7 +56,7 @@
                         </a>
                     </div>
                     {% else %}
-                    <div class="text-center align-self-center   col-md-1">
+                    <div class="text-center align-self-center   col-md-2">
                         <a href="{% url 'show_buddies' %}">
                             <h4 class="w-100 text-primary">
                                 Buddies
@@ -230,6 +230,6 @@
     
     
     
-</html>
+
 {% endblock %}
 {% endblock %}

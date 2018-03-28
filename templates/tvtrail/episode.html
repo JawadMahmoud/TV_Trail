@@ -11,9 +11,9 @@
             <meta name="viewport" content="width=device-width, initial-scale=1">
                 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
                 <link rel="stylesheet" href="{% static "css/profss.css" %}" type="text/css"> </head>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
-        <link rel="stylesheet" href="https://v40.pingendo.com/assets/4.0.0/default/theme.css" type="text/css"> </head>
-            <link rel="stylesheet" href="{% static 'css/expl.css' %}" type="text/css"> </head>
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
+                <link rel="stylesheet" href="https://v40.pingendo.com/assets/4.0.0/default/theme.css" type="text/css"> </head>
+                <link rel="stylesheet" href="{% static 'css/expl.css' %}" type="text/css"> </head>
                 <script src="{% static 'js/explore.js' %}"></script>
                 
                 <body>
@@ -146,7 +146,7 @@
                             
                         </div>
                                 
-                                <div class="py-5 bg-dark">
+                                <div class="py-1 bg-dark">
                                     <div class="container h-100">
                                         <div class="row">
                                             <div class="col-md-5 offset-md-7 bg-dark" > </div>
@@ -171,19 +171,33 @@
     
                                 </div>
 
-    <div>
+
+
+<div class="py-5 bg-dark">
+    <div class="container h-100">
+        <div class="row">
+            <div class="col-md-5 offset-md-7 bg-dark" > </div>
+        </div>
+        <div class="row">
+            <h2 class="w-100 text-white text-left"><strong>Comments:</strong></h2>
+        </div>
+        <div class="row">
+            
+            <div class="col-md-6"  id="left">
+                
         <hr>
-        <h2>Comments:</h2>
             {% for comment in episodes.comments.all %}
                 <div class="comment">
-                    <div class="date">{{ comment.created_date }}</div>
-                    <strong>{{ comment.author }}</strong>
-                    <p>{{ comment.text|linebreaks }}</p>
+                    <p class="text-left text-primary">{{ comment.created_date }}</p>
+                    
+                    <p class="text-left text-primary"><strong>{{ comment.author }}</strong></p>
+                    <p class="text-left text-white">{{ comment.text}}</p>
+                    
                 </div>
             {% empty %}
                 <p>No comments here yet :(</p>
             {% endfor %}
-    </div>
+            </div>
     
     <div>
         <h3>Add comment: </h3>

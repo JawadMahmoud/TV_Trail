@@ -10,9 +10,11 @@
         <link rel="stylesheet" type="text/css" href="{% static "css/baseNav.css" %}"/>
         <link rel="stylesheet" type="text/css" href="{% static "css/base.css" %}"/>
         <link rel="stylesheet" href="{% static 'font-awesome/css/font-awesome.min.css' %}">
-            <link rel="icon" href="{% static "images/Picture1.png" %}">
+        <link rel="icon" href="{% static "images/BrandIcon.png" %}">
         
         <head>
+            
+            
             <title>
                 {% block title_block %}
                 {% endblock %}
@@ -26,7 +28,7 @@
                     
                      
                      <li><a class="navbar-brand menu-icon" href="{% url 'index' %}">
-                         <img class="menu-img img-responsive" border=5px alt="Icon" src="{% static "images/Picture1.png" %}">
+                         <img class="menu-img img-responsive" border=5px alt="Icon" src="{% static "images/Picture1.jpg" %}">
                              </a></li>
                      
                     {% block nav_block %}
@@ -83,37 +85,39 @@
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
             <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+
             <style type="text/css">
-                body { background: black !important; } /* Adding !important forces the browser to overwrite the default style applied by Bootstrap */
+                body { background: black !important; }
                 
                 html, body {
-                    height: 100%;
-                    margin: 0;
+                height: 100%;
+                margin: 0;
                 }
-            .container {
+                .container {
                 padding:25px;
                 min-height: 100%;
                 margin: 0 auto -50px;
-            }
-            .footer,
-            .push {
+                }
+                .footer,
+                .push {
                 height: 50px;
-            }
-
-
-
-            .footer {
-            position:fixed;
-            left: 0;
-            bottom: 0;
-            width: 100%;
-            background-color: #9b59b6;
-            color: white;
-            text-align: right;
-            height: 30px;
-    
-    
-            }
+                }
+                
+                
+                
+                .footer {
+                position:fixed;
+                left: 0;
+                bottom: 0;
+                width: 100%;
+                background-color: #9b59b6;
+                color: white;
+                text-align: right;
+                height: 30px;
+                
+                
+                }
+                </style>
             
         </body>
 </html>

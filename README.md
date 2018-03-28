@@ -35,3 +35,7 @@ Note: You will again need to register a user for you to be able to use the appli
 
 Thank you for trying our application. This was created in three weeks by a team of four students.
 
+Sophie Robinson -> HTML, CSS, Bootstrap, Javascript
+Malcolm Maclean -> Unit tests, API
+Mohammed Mukhtar -> HTML, CSS, Bootstrap, Javascript, Ajax
+Jawad Mahmoud -> Models, Views, Templates, API

@@ -2,30 +2,31 @@
 {% load staticfiles %}
 
 {% block title_block %}
-    Register
+Register
 {% endblock %}
 
 {% block body_block %}
-    <h1>
-        Register for TV Trail
-    </h1>
+<h1>
+    Register for TV Trail
+</h1>
 
-    {% if registered %}
-        <strong>Thank you for registering!</strong>
-        <a href="{% url 'index' %}">Return to the homepage.</a><br />
-    {% else %}
-        <h2>
-            Register here:
-        </h2>
-        <form id="user_form" method="post" action="{% url 'register' %}" 
-                enctype="multipart/form-data">
-
-        {% csrf_token %}
-
-        {{ user_form.as_p }}
-        <!-- {{ profile_form.as_p }} -->
-
-        <input type="submit" name="submit" value="Register" />
-        </form>
-    {% endif %}
+{% if registered %}
+<strong>Thank you for registering!</strong>
+<a href="{% url 'index' %}">Return to the homepage.</a><br />
+{% else %}
+<h2>
+    Register here:
+</h2>
+<form id="user_form" method="post" action="{% url 'register' %}"
+    enctype="multipart/form-data">
+    
+    {% csrf_token %}
+    
+    {{ user_form.as_p }}
+    <!-- {{ profile_form.as_p }} -->
+    
+    <input type="submit" name="submit" value="Register" />
+</form>
+{% endif %}
 {% endblock %}
+

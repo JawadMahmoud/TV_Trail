@@ -8,23 +8,71 @@
 {% block body_block %}
 
 
-<form class="form-inline" action="/tvtrail/user_search/" method="get">
-    <input class="form-control mr-2" type="text" placeholder="Search" name="q">
-    <button class="btn btn-primary" type="submit" value="Search">Search</button>
-</form>
+    
+    <head>
+        <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
+                <link rel="stylesheet" href="https://v40.pingendo.com/assets/4.0.0/default/theme.css" type="text/css"> </head>
+                <link rel="stylesheet" href="{% static 'css/expl.css' %}" type="text/css"> </head>
+                <script src="{% static 'js/explore.js' %}"></script>
+        
+        <body>
+            <div class="py-5 bg-dark">
+                <div class="container">
+                    <div class="row">
+                        
+                        <div>
+                            </div>
+                        <div class="col-md-4" style="">
+                            <h2 class="lead text-center w-100 my-1 mx-4">Search for Buddies</h2>
+                        </div>
+                        
+                        <div class="col-md-5" style="">
+                            <form class="form-inline" action="/tvtrail/user_search/" method="get">
+                                <input class="form-control mr-2" type="text" placeholder="Search" name="q">
+                                    <button class="btn btn-primary" type="submit" value="Search">Search</button>
+                                    </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            
+            {% if filter_users %}
+            <div class="py-5">
+                <h1 class="text-left text-primary"><strong>Users:</strong> </h1>
+                <div class="container">
+                    
+                    <div class="row">
+                        {% for each_user in filter_users %}
+                        <div class="col-md-2 mx-1">
+                            
+                            
+                            <img class="img-fluid d-block" src="{{ MEDIA_URL }}{{ each_user.profile.picture }}" alt="" width="150">>
+                                
+                                
+                                <a href="{% url 'profile' each_user.username %}">{{ each_user }}</a>
+                                </div>
+                        
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            </div>
+            
+            {% else %}
+            <div>
+            </div>
+            <h1 class="text-left text-primary">No users matched the search criteria.</h1>
+            {% endif %}
 
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
-{% if filter_users %}
-    {% for each_user in filter_users %}
-        <li>
-            <img src="{{ MEDIA_URL }}{{ each_user.profile.picture }}" alt="" width="50">
-            <a href="{% url 'profile' each_user.username %}">{{ each_user }}</a>
-        </li>
-    {% endfor %}
-{% else %}
-    <strong>
-        No users matched the search criteria.
-    </strong>
-{% endif %}
+        </body>
+        
 
 {% endblock %}
+

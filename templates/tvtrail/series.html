@@ -2,13 +2,12 @@
 {% load staticfiles %}
 
 {% block title %}
-    {{ selected_user.username }} Profile
+    {{ show.show_name }}
 {% endblock %}
 
 {% block body_block %}
 {% block content %}
-<!DOCTYPE html>
-<html>
+
     
     <head>
         <meta charset="utf-8">
@@ -265,6 +264,6 @@
     
     
     
-</html>
+
 {% endblock %}
 {% endblock %}

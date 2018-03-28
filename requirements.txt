@@ -7,5 +7,4 @@ Pillow==5.0.0
 pytz==2018.3
 requests==2.18.4
 tmdbsimple==2.1.0
-tmdbv3api==0.6.1
 urllib3==1.22

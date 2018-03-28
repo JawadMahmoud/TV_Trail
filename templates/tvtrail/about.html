@@ -1,18 +1,76 @@
-<!DOCTYPE html>
-<html>
-    <title>
-        About
-    </title>
 
-    <body>
-        <h1>
-            About
-        </h1>
+{% extends 'tvtrail/base.html' %}
+{% load staticfiles %}
 
-        <div>
-            This is the about page <br/>
-            <img src="{{ MEDIA_URL }}fpoba_meme_1.jpg" />
+{% block title_block %}
+    About
+{% endblock %}
+
+{% block body_block %}
+
+
+    
+    <head>
+        <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
+                <link rel="stylesheet" href="https://v40.pingendo.com/assets/4.0.0/default/theme.css" type="text/css"> </head>
+    
+    <body class="bg-dark">
+        <div class="py-5 text-white bg-dark">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4">
+                        <p class="lead"><i>"A project for our Web App Development Module, from four students from the University of Glasgow. Many more improvements to come. Keep tuned... "</i>
+                        <br> </p>
+                        <p class="lead m-0"><b>Jawad Mahmoud - TV Trail</b></p>
+                    </div>
+                </div>
+            </div>
         </div>
-
+        <div class="py-1 bg-dark">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h1 class="text-center mb-7 text-white">The Team</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-3 align-self-center text-center p-4">
+                        <img class="img-fluid d-block img-thumbnail" src="{% static "images/Sophie.jpg" %}" >
+                            <h3 class="my-2">Sophie</h3>
+                            <p class="">Web Designer
+                            <br>
+                            </p>
+                            </div>
+                    <div class="col-md-3 align-self-center text-center p-4">
+                        <img class="img-fluid d-block img-thumbnail" src="{% static "images/Jawad.jpg" %}">
+                            <h3 class="my-2">Jawad</h3>
+                            <p class="">Web Creator
+                            <br>
+                            </p>
+                            </div>
+                    <div class="col-md-3 align-self-center text-center p-4">
+                        <img class="img-fluid d-block img-thumbnail" src="{% static "images/Malcolm.jpg" %}">
+                            <h3 class="my-2">Malcolm</h3>
+                            <p class="">Web Populator</p>
+                            </div>
+                    <div class="col-md-3 align-self-center text-center p-4">
+                        <img class="img-fluid d-block img-thumbnail" src="{% static "images/Mohammed.jpg" %}">
+                            <h3 class="my-2">Mohammed</h3>
+                            <p class="">Web Editor</p>
+                            </div>
+                </div>
+            </div>
+        </div>
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     </body>
-</html>
+
+{% endblock %}
+

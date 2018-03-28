@@ -9,11 +9,9 @@ from datetime import datetime
 import tmdbsimple as tmdb
 import time
 tmdb.API_KEY = 'ecffefd97cb0d5b7fe8ce74e5439ff1f'
-## 5 Shows chosen for using the population script, running the script with a lot more shows will take too long a time, this has been tested to run below 
+## 4 Shows chosen for using the population script, running the script with a lot more shows will take too long a time, this has been tested to run below 
 ## 5 minutes hence it should not take too long to set up the application on another user's local device.
-pop_list = [19885, 65495, 60573, 60625, 1399, 1402, 62286, 1418, 60735, 60708, 1396, 1668, 44217, 62560, 
-            69050, 4607, 66732, 61889, 18347, 4556, 62643, 615, 48891, 69470, 71340, 1424, 71663, 61056, 
-            71728, 4589, 67156, 1412, 63247, 10283, 67195, 61733, 62017, 63174, 1403, 66786]
+pop_list = [19885, 65495, 60573, 60625]
 
 
 def populate():
