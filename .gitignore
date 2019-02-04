@@ -10,3 +10,5 @@ helper_stuff/populate_script_temp.py
 *.vscode
 
 tvtrail/migrations
+
+envs
